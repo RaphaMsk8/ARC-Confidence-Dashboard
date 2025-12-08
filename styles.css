@@ -1,0 +1,300 @@
+/* ==================================================================== */
+/* FILE: styles.css - FINAL VISUAL WITH BLUE/CIRCLE THEME */
+/* ==================================================================== */
+
+/* Colors and Fonts */
+:root {
+    --primary-blue: #0070e6; /* Deep Circle Blue */
+    --secondary-green: #28a745; 
+    --background-blue: #e8f0fe; /* Very light blue background for contrast */
+    --card-background: #ffffff; 
+    --text-dark: #333333;
+    --text-light: #f8f9fa; 
+    --text-muted: #6c757d;
+    --success-green: #28a745;
+    --failure-red: #dc3545;
+    --pending-orange: #ffc107;
+}
+
+/* Base and Background */
+body {
+    font-family: 'Arial', sans-serif;
+    color: var(--text-dark);
+    margin: 0;
+    padding: 0;
+    line-height: 1.6;
+    
+    background-color: var(--background-blue); /* Solid color base */
+    
+    position: relative; 
+    z-index: 1; 
+}
+
+/* PSEUDO ELEMENT: Corrected to apply the image and translucency */
+body::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    
+    /* CORREÇÃO DO CAMINHO: Usando o caminho mais simples possível e nova versão para ignorar o cache */
+    background-image: url('usdc_logo.png?v=4'); 
+    background-repeat: repeat;
+    background-size: 150px; 
+    opacity: 0.4; /* Opacity set to 40% */
+    
+    z-index: -1; /* Ensures it stays behind content */
+}
+
+main, header, footer {
+    z-index: 2;
+    position: relative;
+}
+
+/* Header */
+header {
+    background-color: var(--primary-blue); 
+    color: var(--text-light);
+    width: 100%;
+    padding: 25px 0;
+    text-align: center;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    margin-bottom: 30px;
+}
+
+.header-content h1 {
+    color: var(--text-light);
+    margin: 0;
+    font-size: 2.2em;
+}
+
+.header-content p {
+    color: #b3caff; 
+    font-size: 1em;
+}
+
+/* Search Box Styles */
+.search-box {
+    display: flex;
+    justify-content: center;
+    padding: 15px 20px;
+    background-color: rgba(255, 255, 255, 0.15); 
+    margin-top: 15px;
+    border-top: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.search-box input {
+    padding: 12px 15px;
+    width: 40%;
+    min-width: 300px;
+    border: none;
+    border-radius: 8px 0 0 8px;
+    font-size: 1em;
+}
+
+.search-box button {
+    padding: 12px 20px;
+    background-color: var(--card-background);
+    color: var(--primary-blue);
+    border: none;
+    border-radius: 0 8px 8px 0;
+    cursor: pointer;
+    font-size: 1em;
+    font-weight: bold;
+    transition: background-color 0.3s;
+}
+
+.search-box button:hover {
+    background-color: #f0f0f0;
+}
+
+/* Main and Cards */
+main {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 25px;
+    justify-content: center;
+    width: 95%;
+    max-width: 1400px;
+    margin: 0 auto;
+    padding-bottom: 50px;
+}
+
+.card {
+    background-color: var(--card-background);
+    border-radius: 12px;
+    padding: 25px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+    transition: transform 0.3s;
+    border: 1px solid #e0e0e0;
+}
+
+.metric-card { flex: 1 1 calc(25% - 25px); min-width: 250px; }
+.wide-card { flex: 1 1 100%; }
+
+.card h2 { color: var(--text-dark); font-size: 1.4em; margin-top: 0; padding-bottom: 10px; border-bottom: 1px solid #f0f0f0; margin-bottom: 15px; }
+.data-display { font-size: 2.8em; font-weight: bold; color: var(--secondary-green); margin-top: 10px; word-break: break-all; }
+.data-display.blue { color: var(--primary-blue); }
+
+/* Big Transactions */
+#big-transactions ul { list-style: none; padding: 0; margin: 0; }
+#big-transactions ul li { display: flex; justify-content: space-between; background-color: #fcfcfc; border-radius: 8px; padding: 12px 15px; margin-bottom: 10px; border-left: 5px solid var(--primary-blue); }
+#big-transactions ul li strong { flex: 2; color: var(--primary-blue); font-size: 1.1em; }
+.tx-address { flex: 3; color: var(--text-muted); text-align: center; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.tx-time { flex: 1; text-align: right; font-size: 0.9em; color: #888888; min-width: 100px; }
+
+/* NEW STYLE: Recent Transaction Stream List */
+.transaction-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.transaction-list .transaction-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 15px;
+    margin-bottom: 8px;
+    background-color: #f7f9fc;
+    border-radius: 8px;
+    border-left: 5px solid var(--primary-blue);
+    cursor: pointer;
+    transition: background-color 0.2s, box-shadow 0.2s;
+}
+
+.transaction-list .transaction-item:hover {
+    background-color: #eef2f7;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.tx-status-icon {
+    font-size: 1.2em;
+    margin-right: 15px;
+}
+
+.transaction-item.success .tx-status-icon i {
+    color: var(--success-green);
+}
+.transaction-item.failure .tx-status-icon i {
+    color: var(--failure-red);
+}
+.transaction-item.pending .tx-status-icon i {
+    color: var(--pending-orange);
+}
+
+
+.tx-hash {
+    font-family: 'Courier New', monospace;
+    flex: 3; 
+    color: var(--primary-blue);
+    font-size: 1em;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.tx-value {
+    flex: 1.5;
+    text-align: right;
+    font-weight: bold;
+    color: var(--text-dark);
+}
+
+.tx-timestamp {
+    flex: 1;
+    text-align: right;
+    font-size: 0.9em;
+    color: var(--text-muted);
+    min-width: 100px;
+}
+
+
+/* Footer and Social Media */
+footer { 
+    width: 100%; 
+    text-align: center; 
+    padding: 30px 0 20px; 
+    margin-top: auto; 
+    background-color: var(--card-background); 
+    border-top: 1px solid #e0e0e0; 
+    color: var(--text-muted); 
+    font-size: 0.9em; 
+}
+
+.social-links {
+    margin-top: 15px;
+    display: flex;
+    gap: 30px; 
+    justify-content: center; 
+}
+
+.social-links a {
+    color: var(--text-dark); 
+    text-decoration: none;
+    transition: color 0.3s ease;
+    display: flex;
+    flex-direction: column; 
+    align-items: center; 
+}
+
+.social-links .platform-label {
+    font-size: 11px;
+    font-weight: 500;
+    text-transform: uppercase;
+    color: var(--text-muted); 
+}
+
+.social-links a i {
+    font-size: 28px;
+    margin-bottom: 5px;
+    color: var(--text-dark); 
+    transition: color 0.3s ease, transform 0.3s ease;
+}
+
+/* Specific icon colors */
+.social-links .website-icon,
+.social-links .discord-icon {
+    color: var(--primary-blue); 
+}
+
+.social-links .x-icon {
+    color: var(--text-dark); 
+}
+
+/* Hover Effect */
+.social-links a:hover .platform-label {
+    color: var(--primary-blue);
+}
+.social-links a:hover i {
+    color: var(--secondary-green); 
+    transform: scale(1.1);
+}
+
+/* Media Queries */
+@media (max-width: 1024px) {
+    .metric-card { flex: 1 1 calc(50% - 15px); }
+    .search-box input { width: 60%; }
+}
+@media (max-width: 600px) { 
+    .metric-card { flex: 1 1 100%; }
+    .search-box { flex-direction: column; }
+    .search-box input { border-radius: 8px; margin-bottom: 10px; width: 90%; }
+    .search-box button { border-radius: 8px; width: 90%; }
+    
+    .transaction-list .transaction-item {
+        flex-wrap: wrap;
+    }
+    .tx-hash, .tx-value, .tx-timestamp {
+        flex: 1 1 50%;
+        text-align: left;
+    }
+    .tx-value, .tx-timestamp {
+        text-align: right;
+    }
+    .tx-status-icon {
+        flex: 0 0 auto;
+    }
+}
