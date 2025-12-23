@@ -1,5 +1,5 @@
 # ARC Institutional Confidence Dashboard (AICD) 🏛️
-
+![Dashboard Preview](dashboard-preview.png)
 [![Live Demo](https://img.shields.io/badge/demo-live-brightgreen)](https://arc-confidence-dashboard-v2.vercel.app/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Network: ARC](https://img.shields.io/badge/Network-ARC-blue)](https://arcindex.xyz/)
