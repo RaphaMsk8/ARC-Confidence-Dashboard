@@ -35,7 +35,7 @@ In a rapidly evolving ecosystem, AICD serves as a vital **"capital window"**, pr
 ## 👤 Author
 
 **Raphael Marques Ribeiro Dos Santos**
-- **LinkedIn:** [Raphael Marques](https://www.linkedin.com/in/raphael-marques-92a892110/)
+- **LinkedIn:** https://www.linkedin.com/in/raphael-marques-ribeiro-dos-santos-92a892110/
 - **Twitter/X:** [@RaphaelxMarques](https://x.com/RaphaelxMarques)
 - **Portfolio:** [Vercel Live Demo](https://arc-confidence-dashboard-v2.vercel.app/)
 
