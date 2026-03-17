@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ARC | Institutional Terminal</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="https://cdn.ethers.io/lib/ethers-5.2.umd.min.js" type="application/javascript"></script>
+</head>
+<body>
+    <div class="terminal-container">
+        <nav class="top-nav">
+            <div class="brand">ARC <span>TERMINAL</span></div>
+            <div class="status-box">
+                <span class="pulse-dot"></span> LIVE NETWORK FEED
+            </div>
+        </nav>
+
+        <div class="stats-grid">
+            <div class="stat-card">
+                <span class="label">CURRENT BLOCK</span>
+                <div id="current-block" class="value">---</div>
+            </div>
+            <div class="stat-card">
+                <span class="label">TOTAL TRANSACTIONS</span>
+                <div id="total-transactions" class="value">---</div>
+            </div>
+            <div class="stat-card">
+                <span class="label">ARC MARKET CAP</span>
+                <div id="usdc-market-cap" class="value">---</div>
+            </div>
+            <div class="stat-card">
+                <span class="label">FINALITY</span>
+                <div id="tempo-finalidade" class="value">1.50s</div>
+            </div>
+        </div>
+
+        <div class="main-layout">
+            <section class="main-feed">
+                <div class="header-box">
+                    <h3><i class="fas fa-stream"></i> TRANSACTION FLOW</h3>
+                </div>
+                <div class="table-container">
+                    <table class="tx-table">
+                        <thead>
+                            <tr>
+                                <th>STATUS</th>
+                                <th>TX HASH</th>
+                                <th>TYPE</th>
+                                <th class="text-right">AMOUNT (USDC)</th>
+                                <th class="text-right">GAS FEE</th>
+                            </tr>
+                        </thead>
+                        <tbody id="recent-transactions-list">
+                            </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <aside class="side-feed">
+                <div class="header-box">
+                    <h3><i class="fas fa-whale"></i> WHALE WATCH</h3>
+                </div>
+                <div id="big-transactions" class="whale-list">
+                    </div>
+            </aside>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
