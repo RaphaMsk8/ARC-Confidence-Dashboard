@@ -1,86 +1,63 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-br">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ARC Institutional Confidence Dashboard (AICD)</title>
-    
-    <link rel="stylesheet" href="styles.css">
-    
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
-    
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/ethers/5.7.2/ethers.umd.min.js" type="application/javascript"></script>
+    <title>ARC Network | Expert Terminal</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="https://cdn.ethers.io/lib/ethers-5.2.umd.min.js" type="application/javascript"></script>
 </head>
 <body>
-    <header>
-        <div class="header-content">
-            <h1>ARC Institutional Confidence Dashboard (AICD)</h1>
-            <p>Real-Time On-Chain and Market Stability Analysis.</p>
-        </div>
+    <div class="dashboard-wrapper">
+        <header class="stats-grid">
+            <div class="stat-card">
+                <span class="label">Bloco Atual</span>
+                <div id="current-block" class="value">---</div>
+            </div>
+            <div class="stat-card">
+                <span class="label">Total de Transações</span>
+                <div id="total-transactions" class="value">---</div>
+            </div>
+            <div class="stat-card">
+                <span class="label">USDC Market Cap</span>
+                <div id="usdc-market-cap" class="value">---</div>
+            </div>
+            <div class="stat-card">
+                <span class="label">Finalidade</span>
+                <div id="tempo-finalidade" class="value">1.50s</div>
+            </div>
+        </header>
 
-        <section class="search-box">
-            <input type="text" id="searchInput" placeholder="Search Wallets or Token Contracts">
-            <button onclick="performSearch()">Search</button>
-        </section>
-    </header>
-
-    <main>
-        <section class="card metric-card">
-            <h2>USDC Global Market Cap</h2>
-            <p>Real-time market valuation of the USDC stablecoin:</p>
-            <div id="usdc-market-cap" class="data-display blue">Loading...</div>
-        </section>
-
-        <section class="card metric-card">
-            <h2>Current Block Height</h2>
-            <p>Real-time proof that the ARC chain is actively producing blocks:</p>
-            <div id="current-block" class="data-display blue">Loading...</div>
-        </section>
-        
-        <section class="card metric-card">
-            <h2>Total Transactions</h2>
-            <p>Total count of all transactions on the ARC Testnet:</p>
-            <div id="total-transactions" class="data-display">Loading...</div>
-        </section>
-
-        <section class="card metric-card">
-            <h2>Time to Finality</h2>
-            <p>Time for a transaction to be permanently confirmed (Specification):</p>
-            <div id="tempo-finalidade" class="data-display blue">Loading...</div>
-        </section>
-
-        <section class="card wide-card">
-            <h2>Big Transaction Watch (>$1k)</h2>
-            <p>Real-time report of large fund movements:</p>
-            <div id="big-transactions">Loading real transaction data...</div>
-        </section>
-        
-        <section class="card wide-card recent-blocks-stream">
-            <h2>Recent Transaction Stream</h2>
-            <p>Real-time transaction stream on ARC Testnet (Click to view details):</p>
-            <div id="recent-transactions-list">
+        <main class="transaction-container">
+            <div class="table-header">
+                <h3><i class="fas fa-bolt" style="color: #f1c40f;"></i> Live Network Activity</h3>
+                <div class="live-status">
+                    <span class="pulse-dot"></span>
+                    <span class="live-text">REAL-TIME FEED</span>
                 </div>
-        </section>
-    </main>
+            </div>
+            
+            <div class="table-responsive">
+                <table class="expert-table">
+                    <thead>
+                        <tr>
+                            <th>Status</th>
+                            <th>Hash da Transação</th>
+                            <th>Ação</th>
+                            <th class="text-right">Valor (USDC)</th>
+                            <th class="text-right">Gás/Taxa</th>
+                        </tr>
+                    </thead>
+                    <tbody id="recent-transactions-list">
+                        </tbody>
+                </table>
+            </div>
+        </main>
 
-    <footer>
-        <p>On-Chain Data via ARC Testnet API | Developed by Raphael Marques Ribeiro Dos Santos</p>
-        
-        <div class="social-links">
-            <a href="https://www.arc.network/" target="_blank" title="ARC Official Website">
-                <i class="fas fa-globe website-icon"></i>
-                <span class="platform-label">Website</span>
-            </a>
-            <a href="https://discord.gg/buildonarc" target="_blank" title="ARC Discord Community">
-                <i class="fab fa-discord discord-icon"></i>
-                <span class="platform-label">Discord</span>
-            </a>
-            <a href="https://x.com/arc" target="_blank" title="ARC Official X (Twitter)">
-                <i class="fab fa-x-twitter x-icon"></i>
-                <span class="platform-label">X (Twitter)</span>
-            </a>
-        </div>
-    </footer>
+        <section id="big-transactions" class="whale-section">
+            </section>
+    </div>
 
     <script src="script.js"></script>
 </body>
