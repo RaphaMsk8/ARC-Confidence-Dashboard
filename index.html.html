@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ARC | Institutional Terminal</title>
+    <script src="https://cdn.ethers.io/lib/ethers-5.2.umd.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="app-shell">
+        <nav class="top-nav">
+            <div class="logo-area">ARC <span>TERMINAL</span></div>
+            <div class="nav-tools">
+                <div class="live-indicator"><div class="status-dot"></div> <span data-i18n="navStatus">LIVE FEED</span></div>
+                <select id="langSwitcher" class="lang-picker">
+                    <option value="en">English</option>
+                    <option value="pt">Português</option>
+                    <option value="es">Español</option>
+                </select>
+            </div>
+        </nav>
+        <div class="stats-grid">
+            <div class="stat-item"><div class="stat-label" data-i18n="blockHeight">Block Height</div><div id="currentBlock" class="stat-value">---</div></div>
+            <div class="stat-item"><div class="stat-label" data-i18n="totalTxs">Total Transactions</div><div class="stat-value">266,051,195</div></div>
+            <div class="stat-item"><div class="stat-label" data-i18n="mCap">ARC Market Cap</div><div class="stat-value">$399,085,210</div></div>
+            <div class="stat-item"><div class="stat-label" data-i18n="finality">Avg Finality</div><div class="stat-value">1.52s</div></div>
+        </div>
+        <div class="terminal-grid">
+            <div class="feed-panel">
+                <div class="panel-header"><h3 data-i18n="cascadeTitle">TRANSACTION CASCADE</h3><span id="pageInfo">Page 1 / 150 Items</span></div>
+                <div class="table-scroll">
+                    <table class="arc-table">
+                        <thead><tr><th data-i18n="thHash">HASH</th><th data-i18n="thType">TYPE</th><th data-i18n="thValue">VALUE (USDC)</th><th data-i18n="thTime">TIMESTAMP</th></tr></thead>
+                        <tbody id="txCascadeBody"></tbody>
+                    </table>
+                </div>
+            </div>
+            <aside class="whale-panel"><h3 class="whale-title" data-i18n="whaleTitle">INSTITUTIONAL WATCH</h3><div id="whaleAlertList"></div></aside>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
