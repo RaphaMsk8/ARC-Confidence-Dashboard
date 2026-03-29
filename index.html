@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ARC Institutional Confidence Dashboard (AICD)</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ethers/5.7.2/ethers.umd.min.js"></script>
+</head>
+<body>
+    <header>
+        <div class="header-content">
+            <h1>ARC Institutional Confidence Dashboard</h1>
+            <p>Live USDC & Asset Analysis on ARC Network</p>
+        </div>
+        <section class="search-box">
+            <input type="text" id="searchInput" placeholder="Search Wallet or Tx Hash...">
+            <button onclick="performSearch()">Search</button>
+        </section>
+    </header>
+
+    <main>
+        <section class="card">
+            <h2>USDC Market Cap (ARC)</h2>
+            <div id="usdc-market-cap" class="data-display blue">Syncing...</div>
+        </section>
+
+        <section class="card">
+            <h2>Current Block Height</h2>
+            <div id="current-block" class="data-display blue">...</div>
+        </section>
+        
+        <section class="card">
+            <h2>Total Network Transactions</h2>
+            <div id="total-transactions" class="data-display">...</div>
+        </section>
+
+        <section class="card">
+            <h2>Finality Speed</h2>
+            <div id="tempo-finalidade" class="data-display blue">1.50s</div>
+        </section>
+
+        <section class="card wide-card">
+            <h2>Institutional Movement Watch (> 1,000 USDC)</h2>
+            <div id="big-transactions">Scanning ARC Network for whale movements...</div>
+        </section>
+        
+        <section class="card wide-card">
+            <h2>Live Transaction Stream (Real-Time)</h2>
+            <div id="recent-transactions-list">Waiting for new transactions...</div>
+        </section>
+    </main>
+
+    <footer>
+        <p>Data Source: ARC Testnet RPC & ArcScan API | Developer: Raphael Marques</p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
