@@ -1,6 +1,8 @@
 :root {
     --primary-blue: #0070e6;
     --bg: #eef2f7;
+    --card-shadow: rgba(0, 0, 0, 0.05);
+    --hover-shadow: rgba(0, 112, 230, 0.15);
 }
 
 body {
@@ -9,11 +11,10 @@ body {
     position: relative; z-index: 1;
 }
 
-/* Fundo Corrigido */
 body::before {
     content: "";
     position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-    background-image: url('usdc_logo.png.png'); /* Nome do ficheiro no teu GitHub */
+    background-image: url('usdc_logo.png.png');
     background-repeat: repeat; background-size: 100px;
     opacity: 0.06; z-index: -1;
 }
@@ -23,28 +24,45 @@ header {
     padding: 30px; text-align: center;
 }
 
-.search-box input { padding: 10px; width: 300px; border-radius: 5px 0 0 5px; border: none; }
-.search-box button { padding: 10px 20px; border-radius: 0 5px 5px 0; border: none; background: #004da1; color: white; cursor: pointer; }
-
 main {
     max-width: 1100px; margin: 30px auto;
     display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
     gap: 20px; padding: 0 20px;
 }
 
-.card { background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
+/* Efeito de Salto nos Cards */
+.card { 
+    background: white; 
+    padding: 20px; 
+    border-radius: 12px; 
+    box-shadow: 0 4px 10px var(--card-shadow); 
+    transition: transform 0.3s ease, box-shadow 0.3s ease; /* Animação suave */
+}
+
+.card:hover {
+    transform: translateY(-8px); /* Salto para cima */
+    box-shadow: 0 12px 25px var(--hover-shadow); /* Sombra mais profunda no hover */
+}
+
 .wide-card { grid-column: 1 / -1; }
 
 .data-display { font-size: 2.2rem; font-weight: bold; color: var(--primary-blue); margin: 10px 0; }
 
-/* Listas Reais */
-.transaction-list { list-style: none; padding: 0; }
 .transaction-item {
     display: flex; justify-content: space-between; align-items: center;
-    padding: 12px; border-bottom: 1px solid #eee;
+    padding: 14px; border-bottom: 1px solid #f0f0f0;
     cursor: pointer; transition: 0.2s;
 }
-.transaction-item:hover { background: #f4f8ff; }
-.whale-item { list-style: none; padding: 15px; background: #f0f7ff; border-radius: 8px; border-left: 4px solid var(--primary-blue); margin-bottom: 10px; }
+
+.transaction-item:hover { background: #f9f9f9; }
+
+.whale-item { 
+    padding: 12px; 
+    background: linear-gradient(90deg, #f0f7ff, #ffffff); 
+    border-radius: 8px; 
+    margin-bottom: 8px; 
+    border-left: 5px solid var(--primary-blue); 
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05); 
+}
 
 footer { text-align: center; padding: 30px; color: #777; }
