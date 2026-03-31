@@ -5,9 +5,8 @@ const ENDPOINT_STATS = "https://testnet.arcscan.app/api/v2/stats";
 const ENDPOINT_TXS = "https://testnet.arcscan.app/api/v2/transactions";
 const ARCSCAN_TX_BASE = "https://testnet.arcscan.app/tx/";
 
-// Valor real de mercado aproximado para a rede ARC
+// Valor real de referência (Garante que nunca apareça $0)
 let currentMarketCap = 399085210; 
-let lastMcUpdate = 0;
 
 function formatSmartCap(value) {
     if (!value || isNaN(value)) return "...";
@@ -17,42 +16,44 @@ function formatSmartCap(value) {
     return value.toLocaleString('en-US');
 }
 
+// FUNÇÃO EXCLUSIVA PARA CAPITALIZAÇÃO (Roda a cada 10s)
 async function updateMarketCap() {
-    const now = Date.now();
-    // 3 horas em milissegundos = 10800000
-    if (now - lastMcUpdate > 10800000) {
-        try {
-            const sRes = await fetch(ENDPOINT_STATS);
-            const sData = await sRes.json();
-            // Tenta pegar o market cap da API, se não houver, mantém o base real
-            currentMarketCap = sData.market_cap || 399085210;
-            lastMcUpdate = now;
-            console.log("Market Cap atualizado com sucesso.");
-        } catch (e) {
-            console.warn("Erro ao atualizar Market Cap, mantendo valor base.");
+    try {
+        const sRes = await fetch(ENDPOINT_STATS);
+        const sData = await sRes.json();
+        
+        // Se a API trouxer o dado real, atualiza a variável global
+        if (sData.market_cap && parseFloat(sData.market_cap) > 0) {
+            currentMarketCap = parseFloat(sData.market_cap);
         }
+    } catch (e) {
+        console.warn("Latência na API de Stats, mantendo valor real de segurança.");
     }
-    document.getElementById('usdc-market-cap').textContent = "$" + formatSmartCap(currentMarketCap);
+
+    // Renderiza sempre com o ícone verde de performance
+    const mcElement = document.getElementById('usdc-market-cap');
+    if (mcElement) {
+        mcElement.innerHTML = `
+            <i class="fas fa-chart-line" style="font-size:0.8em; margin-right:10px; color:#2ecc71;"></i>` + 
+            "$" + formatSmartCap(currentMarketCap);
+    }
 }
 
 async function syncBlockchain() {
     try {
-        // Atualiza Bloco
+        // 1. Bloco Atual
         const block = await provider.getBlockNumber();
         document.getElementById('current-block').textContent = block.toLocaleString();
 
-        // Atualiza Stats Gerais (Exceto MC que tem timer próprio)
+        // 2. Estatísticas Gerais (Total de Txs)
         const sRes = await fetch(ENDPOINT_STATS);
         const sData = await sRes.json();
         const totalReal = sData.total_transactions || sData.transactions_count || 0;
         
         document.getElementById('total-transactions').textContent = parseInt(totalReal).toLocaleString();
         document.getElementById('tempo-finalidade').textContent = "1.50s";
-        
-        // Chama a função de Market Cap (que só age de 3 em 3 horas)
-        updateMarketCap();
 
-        // Transações Recentes
+        // 3. Stream de Transações (Lista Recente)
         const tRes = await fetch(ENDPOINT_TXS);
         const tData = await tRes.json();
         const items = tData.items || [];
@@ -67,7 +68,7 @@ async function syncBlockchain() {
 
             items.slice(0, 12).forEach(tx => {
                 const val = parseFloat(ethers.utils.formatEther(tx.value || "0"));
-                const hashShort = tx.hash ? tx.hash.substring(0, 12) + "..." : "---";
+                const hashShort = tx.hash ? tx.hash.substring(0, 14) + "..." : "---";
                 
                 let typeLabel = "";
                 if (tx.to === null || tx.created_contract) {
@@ -102,10 +103,14 @@ async function syncBlockchain() {
         }
 
     } catch (e) {
-        console.error("Sync error:", e);
+        console.error("Erro na sincronização:", e);
     }
 }
 
-// Inicia os loops
-setInterval(syncBlockchain, 5000);
-syncBlockchain();
+// INICIALIZAÇÃO
+updateMarketCap(); // Chama imediatamente ao carregar
+syncBlockchain(); // Chama os dados da rede
+
+// INTERVALOS INDEPENDENTES
+setInterval(updateMarketCap, 10000); // Capitalização a cada 10 segundos
+setInterval(syncBlockchain, 5000);   // Restante a cada 5 segundos
