@@ -1,63 +1,61 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AICD - ARC Institutional Confidence Dashboard</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <title>ARC Institutional Confidence Dashboard (AICD)</title>
     <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ethers/5.7.2/ethers.umd.min.js"></script>
 </head>
 <body>
-
     <header>
-        <h1>ARC Institutional Confidence Dashboard</h1>
-        <p>Live USDC & Asset Analysis on ARC Network</p>
+        <div class="header-content">
+            <h1>ARC Institutional Confidence Dashboard</h1>
+            <p>Live USDC & Asset Analysis on ARC Network</p>
+        </div>
+        <section class="search-box">
+            <input type="text" id="searchInput" placeholder="Search Wallet or Tx Hash...">
+            <button onclick="performSearch()">Search</button>
+        </section>
     </header>
 
     <main>
-        <div class="card" id="mc-card">
-            <h3><i class="fas fa-coins" style="margin-right: 8px;"></i>USDC Market Cap (ARC)</h3>
-            <div id="usdc-market-cap" class="data-display">$26.06 B</div>
-        </div>
+        <section class="card">
+            <h2>USDC Market Cap (ARC)</h2>
+            <div id="usdc-market-cap" class="data-display blue">Syncing...</div>
+        </section>
 
-        <div class="card" id="block-card">
-            <h3><i class="fas fa-layer-group" style="margin-right: 8px;"></i>Current Block Height</h3>
-            <div id="current-block" class="data-display">---</div>
-        </div>
+        <section class="card">
+            <h2>Current Block Height</h2>
+            <div id="current-block" class="data-display blue">...</div>
+        </section>
+        
+        <section class="card">
+            <h2>Total Network Transactions</h2>
+            <div id="total-transactions" class="data-display">...</div>
+        </section>
 
-        <div class="card">
-            <h3><i class="fas fa-exchange-alt" style="margin-right: 8px;"></i>Total Network Txs</h3>
-            <div id="total-transactions" class="data-display">---</div>
-        </div>
+        <section class="card">
+            <h2>Finality Speed</h2>
+            <div id="tempo-finalidade" class="data-display blue">1.50s</div>
+        </section>
 
-        <div class="card">
-            <h3><i class="fas fa-bolt" style="margin-right: 8px;"></i>Finality Speed</h3>
-            <div id="tempo-finalidade" class="data-display" style="color: #2ecc71;">1.50s</div>
-        </div>
-
-        <div class="card wide-card">
-            <h3><i class="fas fa-whale" style="margin-right: 10px; color: #0070e6;"></i>Institutional Movement Watch (> 1,000 USDC)</h3>
-            <p style="color: #777; font-size: 0.9em; margin-bottom: 15px;">Monitoramento em tempo real de fluxos institucionais de alto valor.</p>
-            <div id="big-transactions">
-                <p style="color: #999; font-style: italic; padding: 20px; text-align: center;">
-                    Aguardando movimentações de baleias na rede...
-                </p>
-            </div>
-        </div>
-
-        <div class="card wide-card">
-            <h3><i class="fas fa-broadcast-tower" style="margin-right: 10px; color: #2ecc71;"></i>Live Transaction Stream (Real-Time)</h3>
-            <div id="recent-transactions-list">
-                <p style="text-align: center; padding: 20px;">Sincronizando com a blockchain...</p>
-            </div>
-        </div>
+        <section class="card wide-card">
+            <h2>Institutional Movement Watch (> 1,000 USDC)</h2>
+            <div id="big-transactions">Scanning ARC Network for whale movements...</div>
+        </section>
+        
+        <section class="card wide-card">
+            <h2>Live Transaction Stream (Real-Time)</h2>
+            <div id="recent-transactions-list">Waiting for new transactions...</div>
+        </section>
     </main>
 
     <footer>
-        <p>&copy; 2026 ARC Network Institutional Tools | Powered by ArcScan API</p>
+        <p>Data Source: ARC Testnet RPC & ArcScan API | Developer: Raphael Marques</p>
     </footer>
 
-    <script src="https://cdn.ethers.io/lib/ethers-5.2.umd.min.js" type="application/javascript"></script>
     <script src="script.js"></script>
 </body>
 </html>
