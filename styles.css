@@ -1,68 +1,55 @@
 :root {
     --primary-blue: #0070e6;
+    --success-green: #2ecc71;
     --bg: #eef2f7;
     --card-shadow: rgba(0, 0, 0, 0.05);
-    --hover-shadow: rgba(0, 112, 230, 0.15);
 }
 
-body {
-    font-family: 'Arial', sans-serif;
-    margin: 0; background: var(--bg);
-    position: relative; z-index: 1;
-}
+body { font-family: 'Arial', sans-serif; margin: 0; background: var(--bg); position: relative; z-index: 1; }
 
-body::before {
-    content: "";
-    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-    background-image: url('usdc_logo.png.png');
-    background-repeat: repeat; background-size: 100px;
-    opacity: 0.06; z-index: -1;
-}
-
-header {
-    background: var(--primary-blue); color: white;
-    padding: 30px; text-align: center;
-}
+header { background: var(--primary-blue); color: white; padding: 30px; text-align: center; }
 
 main {
     max-width: 1100px; margin: 30px auto;
-    display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
     gap: 20px; padding: 0 20px;
 }
 
-/* Efeito de Salto nos Cards */
+/* Cards com Salto e Pulso */
 .card { 
-    background: white; 
-    padding: 20px; 
-    border-radius: 12px; 
+    background: white; padding: 20px; border-radius: 12px; 
     box-shadow: 0 4px 10px var(--card-shadow); 
-    transition: transform 0.3s ease, box-shadow 0.3s ease; /* Animação suave */
+    transition: transform 0.3s ease, box-shadow 0.3s ease, border 0.3s;
+    border: 1px solid transparent;
 }
 
-.card:hover {
-    transform: translateY(-8px); /* Salto para cima */
-    box-shadow: 0 12px 25px var(--hover-shadow); /* Sombra mais profunda no hover */
+.card:hover { transform: translateY(-8px); box-shadow: 0 12px 25px rgba(0, 112, 230, 0.15); }
+
+/* Animação de Brilho Verde */
+@keyframes pulse-green {
+    0% { box-shadow: 0 4px 10px var(--card-shadow); }
+    50% { box-shadow: 0 0 20px rgba(46, 204, 113, 0.4); border-color: var(--success-green); }
+    100% { box-shadow: 0 4px 10px var(--card-shadow); }
 }
+
+.update-pulse { animation: pulse-green 1s ease-in-out; }
 
 .wide-card { grid-column: 1 / -1; }
+.data-display { font-size: 1.8rem; font-weight: bold; color: var(--primary-blue); margin: 10px 0; transition: color 0.5s; }
 
-.data-display { font-size: 2.2rem; font-weight: bold; color: var(--primary-blue); margin: 10px 0; }
+/* Lista de Baleias (Cascata) */
+.whale-item {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 15px; background: linear-gradient(90deg, #f0f7ff, #ffffff); 
+    border-radius: 10px; margin-bottom: 10px; border-left: 5px solid var(--primary-blue);
+    cursor: pointer; transition: 0.2s; box-shadow: 0 2px 5px rgba(0,0,0,0.03);
+}
+.whale-item:hover { background: #eef6ff; transform: scale(1.01); border-left-color: var(--success-green); }
 
 .transaction-item {
     display: flex; justify-content: space-between; align-items: center;
-    padding: 14px; border-bottom: 1px solid #f0f0f0;
-    cursor: pointer; transition: 0.2s;
+    padding: 12px; border-bottom: 1px solid #f0f0f0; cursor: pointer;
 }
-
 .transaction-item:hover { background: #f9f9f9; }
-
-.whale-item { 
-    padding: 12px; 
-    background: linear-gradient(90deg, #f0f7ff, #ffffff); 
-    border-radius: 8px; 
-    margin-bottom: 8px; 
-    border-left: 5px solid var(--primary-blue); 
-    box-shadow: 0 2px 5px rgba(0,0,0,0.05); 
-}
 
 footer { text-align: center; padding: 30px; color: #777; }
