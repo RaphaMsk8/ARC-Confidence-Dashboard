@@ -4,118 +4,93 @@ const provider = new ethers.providers.JsonRpcProvider(ARC_RPC_URL);
 const ENDPOINT_STATS = "https://testnet.arcscan.app/api/v2/stats";
 const ENDPOINT_TXS = "https://testnet.arcscan.app/api/v2/transactions";
 const ARCSCAN_TX_BASE = "https://testnet.arcscan.app/tx/";
-
-// ENDPOINT DO CONTRATO NATIVO USDC (0x3600...)
 const ENDPOINT_USDC_SUPPLY = "https://testnet.arcscan.app/api?module=stats&action=tokensupply&contractaddress=0x3600000000000000000000000000000000000000";
 
-// Valor de segurança baseado no seu print do ArcScan ($26.06B)
-let currentMarketCap = 26064803841; 
+let whaleTransactions = [];
 
 function formatSmartCap(value) {
-    if (!value || isNaN(value)) return "...";
-    
-    if (value >= 1e12) return (value / 1e12).toFixed(2) + " T"; 
-    if (value >= 1e9) return (value / 1e9).toFixed(2) + " B"; // Alvo: 26.06 B
-    if (value >= 1e6) return (value / 1e6).toFixed(2) + " M";    
+    if (value >= 1e9) return (value / 1e9).toFixed(2) + " B";
+    if (value >= 1e6) return (value / 1e6).toFixed(2) + " M";
     return value.toLocaleString('en-US');
 }
 
 async function updateMarketCap() {
     try {
-        const sRes = await fetch(ENDPOINT_USDC_SUPPLY);
-        const sData = await sRes.json();
-        
-        // O result da API retorna o valor bruto (sem decimais)
-        if (sData.status === "1" && sData.result) {
-            const rawSupply = parseFloat(sData.result);
-            // Dividimos por 1.000.000 porque o USDC tem 6 casas decimais
-            currentMarketCap = rawSupply / 1000000; 
-        }
-    } catch (e) {
-        console.warn("Usando backup do Market Cap.");
-    }
+        const response = await fetch(ENDPOINT_USDC_SUPPLY);
+        const data = await response.json();
+        let cap = 26064803841; // Fallback baseado no ArcScan
 
-    const mcElement = document.getElementById('usdc-market-cap');
-    if (mcElement) {
-        // Efeito visual de atualização (pisca verde)
-        mcElement.style.transition = "0.5s";
-        mcElement.style.color = "#2ecc71";
+        if (data.status === "1" && data.result) {
+            cap = parseFloat(data.result) / 1000000;
+        }
+
+        const mcCard = document.getElementById('mc-card');
+        const mcDisplay = document.getElementById('usdc-market-cap');
         
-        mcElement.innerHTML = `
-            <i class="fas fa-chart-line" style="font-size:0.8em; margin-right:10px;"></i>` + 
-            "$" + formatSmartCap(currentMarketCap);
-            
-        setTimeout(() => { mcElement.style.color = "#0070e6"; }, 1000);
-    }
+        if (mcDisplay) {
+            mcCard.classList.add('update-pulse');
+            mcDisplay.innerHTML = `<i class="fas fa-chart-line" style="margin-right:10px;"></i>$${formatSmartCap(cap)}`;
+            setTimeout(() => mcCard.classList.remove('update-pulse'), 1000);
+        }
+    } catch (e) { console.warn("Erro ao buscar Market Cap"); }
 }
 
 async function syncBlockchain() {
     try {
+        // 1. Bloco e Stats
         const block = await provider.getBlockNumber();
         document.getElementById('current-block').textContent = block.toLocaleString();
-
+        
         const sRes = await fetch(ENDPOINT_STATS);
         const sData = await sRes.json();
-        const totalReal = sData.total_transactions || sData.transactions_count || 0;
-        
-        document.getElementById('total-transactions').textContent = parseInt(totalReal).toLocaleString();
-        document.getElementById('tempo-finalidade').textContent = "1.50s";
+        document.getElementById('total-transactions').textContent = parseInt(sData.total_transactions || 0).toLocaleString();
 
+        // 2. Transações
         const tRes = await fetch(ENDPOINT_TXS);
         const tData = await tRes.json();
         const items = tData.items || [];
         
-        const list = document.getElementById('recent-transactions-list');
-        const bigList = document.getElementById('big-transactions');
+        const listContainer = document.getElementById('recent-transactions-list');
+        const whaleContainer = document.getElementById('big-transactions');
 
         if (items.length > 0) {
-            let html = '<ul style="list-style:none; padding:0; margin:0;">';
-            let bigHtml = '<ul style="list-style:none; padding:0; margin:0;">';
-            let foundLarge = false;
-
-            items.slice(0, 12).forEach(tx => {
+            let streamHtml = '<div style="margin-top:10px;">';
+            
+            items.slice(0, 8).forEach(tx => {
                 const val = parseFloat(ethers.utils.formatEther(tx.value || "0"));
-                const hashShort = tx.hash ? tx.hash.substring(0, 14) + "..." : "---";
+                const hashShort = tx.hash.substring(0, 12) + "...";
                 
-                let typeLabel = "";
-                if (tx.to === null || tx.created_contract) {
-                    typeLabel = "<span style='color:#e67e22; font-weight:bold;'>DEPLOY</span>";
-                } else if (tx.input && tx.input !== "0x") {
-                    typeLabel = "<span style='color:#9b59b6; font-weight:bold;'>CALL/MINT</span>";
-                } else {
-                    typeLabel = `<span style='color:#2ecc71; font-weight:bold;'>${val.toFixed(4)} USDC</span>`;
+                // Lógica de Baleia
+                if (val >= 1000 && !whaleTransactions.some(w => w.hash === tx.hash)) {
+                    whaleTransactions.unshift({ hash: tx.hash, value: val, time: new Date().toLocaleTimeString() });
+                    if (whaleTransactions.length > 5) whaleTransactions.pop();
                 }
-                
-                html += `
-                    <li class="transaction-item" onclick="window.open('${ARCSCAN_TX_BASE}${tx.hash}', '_blank')">
-                        <div style="display:flex; align-items:center; gap:10px;">
-                            <i class="fas fa-cube" style="color:#ccc; font-size:0.8em;"></i>
-                            <span style="font-family:'Courier New', monospace; font-size:0.9em;">${hashShort}</span>
-                        </div>
-                        <div style="text-align:right;">${typeLabel}</div>
-                    </li>`;
 
-                if (val > 50) {
-                    foundLarge = true;
-                    bigHtml += `
-                        <li class="whale-item">
-                            <i class="fas fa-landmark" style="color:#0070e6;"></i> 
-                            <strong style="font-size:0.9em;">INSTITUTIONAL: ${val.toFixed(2)} USDC</strong>
-                        </li>`;
-                }
+                streamHtml += `
+                    <div class="transaction-item" onclick="window.open('${ARCSCAN_TX_BASE}${tx.hash}', '_blank')">
+                        <span><i class="fas fa-cube" style="color:#ddd; margin-right:10px;"></i>${hashShort}</span>
+                        <strong style="color:var(--success-green)">${val.toFixed(4)} USDC</strong>
+                    </div>`;
             });
+            listContainer.innerHTML = streamHtml + '</div>';
 
-            list.innerHTML = html + '</ul>';
-            bigList.innerHTML = foundLarge ? bigHtml + '</ul>' : "<p style='color:#999; font-size:0.9em; padding:10px;'>Monitoring high-value whale flow...</p>";
+            if (whaleTransactions.length > 0) {
+                let whaleHtml = '';
+                whaleTransactions.forEach(w => {
+                    whaleHtml += `
+                        <div class="whale-item" onclick="window.open('${ARCSCAN_TX_BASE}${w.hash}', '_blank')">
+                            <span><i class="fas fa-whale" style="margin-right:10px;"></i><strong>BALEIA: ${w.value.toLocaleString()} USDC</strong></span>
+                            <small>${w.time} <i class="fas fa-external-link-alt" style="margin-left:5px; font-size:0.8em;"></i></small>
+                        </div>`;
+                });
+                whaleContainer.innerHTML = whaleHtml;
+            }
         }
-
-    } catch (e) {
-        console.error("Sync error:", e);
-    }
+    } catch (e) { console.error("Erro na sincronização geral"); }
 }
 
-// Inicialização e Intervalos
+// Inicialização
 updateMarketCap();
 syncBlockchain();
-setInterval(updateMarketCap, 10000); // 10s para o Market Cap
-setInterval(syncBlockchain, 5000);   // 5s para o resto
+setInterval(updateMarketCap, 15000); // Aumentado para 15s para evitar bloqueio de API
+setInterval(syncBlockchain, 8000);   // Aumentado para 8s
