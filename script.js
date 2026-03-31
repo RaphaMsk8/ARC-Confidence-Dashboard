@@ -5,44 +5,39 @@ const ENDPOINT_STATS = "https://testnet.arcscan.app/api/v2/stats";
 const ENDPOINT_TXS = "https://testnet.arcscan.app/api/v2/transactions";
 const ARCSCAN_TX_BASE = "https://testnet.arcscan.app/tx/";
 
-// Valor base real para a rede ARC
-let currentMarketCap = 399085210; 
+// ENDPOINT DO CONTRATO NATIVO USDC (0x3600...)
+const ENDPOINT_USDC_SUPPLY = "https://testnet.arcscan.app/api?module=stats&action=tokensupply&contractaddress=0x3600000000000000000000000000000000000000";
+
+// Valor de segurança baseado no seu print do ArcScan ($26.06B)
+let currentMarketCap = 26064803841; 
 
 function formatSmartCap(value) {
     if (!value || isNaN(value)) return "...";
+    
     if (value >= 1e12) return (value / 1e12).toFixed(2) + " T"; 
-    if (value >= 1e9) return (value / 1e9).toFixed(2) + " B";    
+    if (value >= 1e9) return (value / 1e9).toFixed(2) + " B"; // Alvo: 26.06 B
     if (value >= 1e6) return (value / 1e6).toFixed(2) + " M";    
     return value.toLocaleString('en-US');
 }
 
 async function updateMarketCap() {
     try {
-        const sRes = await fetch(ENDPOINT_STATS);
+        const sRes = await fetch(ENDPOINT_USDC_SUPPLY);
         const sData = await sRes.json();
         
-        // LÓGICA DE PRIORIDADE:
-        // 1. Tenta o Market Cap direto da API
-        // 2. Se for 0 ou estático, calcula: Total Supply * Preço (se existirem)
-        // 3. Se tudo falhar, usa o valor base + pequena variação das transações
-        
-        if (sData.market_cap && parseFloat(sData.market_cap) > 400000000) {
-            currentMarketCap = parseFloat(sData.market_cap);
-        } else if (sData.total_supply && sData.token_price) {
-            currentMarketCap = parseFloat(sData.total_supply) * parseFloat(sData.token_price);
-        } else {
-            // Simulação de variação real: Adiciona um pequeno valor baseado no total de txs
-            // Isso garante que o número mude levemente conforme a rede cresce
-            const totalTxs = sData.total_transactions || 0;
-            currentMarketCap = 399085210 + (totalTxs * 0.5); 
+        // O result da API retorna o valor bruto (sem decimais)
+        if (sData.status === "1" && sData.result) {
+            const rawSupply = parseFloat(sData.result);
+            // Dividimos por 1.000.000 porque o USDC tem 6 casas decimais
+            currentMarketCap = rawSupply / 1000000; 
         }
     } catch (e) {
-        console.warn("Usando cache do Market Cap devido à latência.");
+        console.warn("Usando backup do Market Cap.");
     }
 
     const mcElement = document.getElementById('usdc-market-cap');
     if (mcElement) {
-        // Adiciona um efeito de "pulso" na cor quando o valor atualiza
+        // Efeito visual de atualização (pisca verde)
         mcElement.style.transition = "0.5s";
         mcElement.style.color = "#2ecc71";
         
@@ -50,7 +45,6 @@ async function updateMarketCap() {
             <i class="fas fa-chart-line" style="font-size:0.8em; margin-right:10px;"></i>` + 
             "$" + formatSmartCap(currentMarketCap);
             
-        // Volta para a cor original (azul) após 1 segundo
         setTimeout(() => { mcElement.style.color = "#0070e6"; }, 1000);
     }
 }
@@ -120,10 +114,8 @@ async function syncBlockchain() {
     }
 }
 
-// Inicialização
+// Inicialização e Intervalos
 updateMarketCap();
 syncBlockchain();
-
-// Intervalos
-setInterval(updateMarketCap, 10000); 
-setInterval(syncBlockchain, 5000);
+setInterval(updateMarketCap, 10000); // 10s para o Market Cap
+setInterval(syncBlockchain, 5000);   // 5s para o resto
