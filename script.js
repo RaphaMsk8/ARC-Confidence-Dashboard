@@ -1,19 +1,19 @@
 const ARC_RPC_URL = "https://rpc.testnet.arc.network/";
 const provider = new ethers.providers.JsonRpcProvider(ARC_RPC_URL);
 
-// Mini Chart Setup
-const ctx = document.getElementById('miniChart').getContext('2d');
+// Chart JS: Linha Suave
+const ctx = document.getElementById('marketChart').getContext('2d');
 new Chart(ctx, {
     type: 'line',
     data: {
         labels: [1,2,3,4,5,6,7,8,9,10],
         datasets: [{
-            data: [40, 35, 55, 45, 60, 50, 75, 70, 85, 90],
+            data: [198.2, 198.5, 198.3, 198.8, 198.6, 199.04, 198.9, 199.1, 199.04],
             borderColor: '#3d8aff',
             borderWidth: 2,
             pointRadius: 0,
             fill: true,
-            backgroundColor: 'rgba(61, 138, 255, 0.1)',
+            backgroundColor: 'rgba(61, 138, 255, 0.05)',
             tension: 0.4
         }]
     },
@@ -24,7 +24,7 @@ new Chart(ctx, {
     }
 });
 
-async function updateData() {
+async function refreshData() {
     try {
         const block = await provider.getBlockNumber();
         document.getElementById('current-block').textContent = block.toLocaleString();
@@ -35,38 +35,34 @@ async function updateData() {
         const whaleTable = document.getElementById('whale-table');
         const streamList = document.getElementById('recent-transactions-list');
         
-        whaleTable.innerHTML = "";
-        streamList.innerHTML = "";
+        whaleTable.innerHTML = ""; streamList.innerHTML = "";
 
         data.items.slice(0, 10).forEach(tx => {
             const val = parseFloat(ethers.utils.formatEther(tx.value || "0"));
             
-            // Tabela Institucional
-            if (val > 0.01) { // Reduzi para aparecer dados no teste
-                whaleTable.innerHTML += `
-                    <tr>
-                        <td>2023-05-23 17:23</td>
-                        <td style="font-weight:600">${val.toFixed(2)} USDC</td>
-                        <td style="color:#8b9bb4">Institutional...</td>
-                        <td style="color:#8b9bb4">Known Cluster</td>
-                        <td style="color:#3d8aff">0xae...</td>
-                    </tr>`;
-            }
+            whaleTable.innerHTML += `
+                <tr>
+                    <td>2023-05-23 17:23</td>
+                    <td style="font-weight:700">${val.toFixed(2)} USDC</td>
+                    <td style="color:#8b9bb4">Institutional...</td>
+                    <td style="color:#8b9bb4">Known Cluster</td>
+                    <td style="color:#4ade80">Shorterd</td>
+                    <td style="color:#3d8aff">${tx.hash.substring(0,10)}...</td>
+                </tr>`;
 
-            // Stream List
             streamList.innerHTML += `
-                <div class="tx-row">
-                    <span style="font-family:monospace; color:#8b9bb4">${tx.hash.substring(0,12)}...</span>
-                    <span style="color:#4ade80; font-weight:600">${val.toFixed(4)} USDC</span>
+                <div style="display:flex; justify-content:space-between; padding:10px 0; border-bottom:1px solid rgba(255,255,255,0.03); font-size:0.8rem;">
+                    <span style="color:#8b9bb4">${tx.hash.substring(0,12)}...</span>
+                    <span style="color:#4ade80; font-weight:700">${val.toFixed(4)} USDC</span>
                 </div>`;
         });
     } catch (e) { console.error(e); }
 }
 
-setInterval(updateData, 5000);
-updateData();
-
 function performSearch() {
     const q = document.getElementById('searchInput').value;
     if (q.length > 40) window.open(`https://testnet.arcscan.app/tx/${q}`, '_blank');
 }
+
+setInterval(refreshData, 5000);
+refreshData();

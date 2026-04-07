@@ -3,60 +3,62 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ARC Institutional Dashboard</title>
+    <title>ARC Institutional Terminal | AICD</title>
     <link rel="stylesheet" href="styles.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/ethers/5.7.2/ethers.umd.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
-    <div class="overlay-glow"></div>
+    <div class="glow-bg"></div>
     <header>
-        <h1>ARC Institutional Confidence Dashboard</h1>
-        <p class="subtitle">Live USDC & Asset Analysis on ARC Network</p>
+        <div class="branding">
+            <h1>ARC Institutional Confidence Dashboard</h1>
+            <p>Live USDC & Asset Analysis on ARC Network</p>
+        </div>
         
-        <div class="nav-toolbar">
-            <div class="dropdown">Filter by Asset <i class="fas fa-caret-down"></i></div>
-            <div class="search-container">
+        <div class="glass-nav">
+            <button class="nav-btn">Filter by Asset <i class="fas fa-chevron-down"></i></button>
+            <div class="search-v3">
                 <input type="text" id="searchInput" placeholder="Search Wallet (0x...) or Tx Hash...">
                 <button onclick="performSearch()"><i class="fas fa-search"></i> Search</button>
             </div>
-            <div class="toggles">
-                <div class="toggle-group">Filter by Asset <div class="switch active"></div></div>
-                <div class="toggle-group">Timeframe <div class="switch"></div></div>
+            <div class="nav-controls">
+                <div class="control-item">Filter by Asset <label class="switch"><input type="checkbox" checked><span></span></label></div>
+                <div class="control-item">Timeframe <label class="switch"><input type="checkbox"><span></span></label></div>
             </div>
         </div>
     </header>
 
-    <main class="dashboard-container">
-        <div class="card market-cap">
-            <div class="card-label">USDC Market Cap (ARC)</div>
-            <div class="market-content">
-                <div class="value-box">
-                    <span id="usdc-market-cap" class="big-value">$199.04 B</span>
-                    <span class="trend positive">+0.15% <span class="time">24h Change</span></span>
+    <main class="main-grid">
+        <div class="glass-card market-cap">
+            <div class="card-tag">USDC Market Cap (ARC)</div>
+            <div class="flex-row">
+                <div class="val-group">
+                    <span id="usdc-market-cap" class="massive-text">$199.04 B</span>
+                    <span class="pct positive">+0.15% <small>(24h)</small></span>
                 </div>
-                <canvas id="miniChart"></canvas>
+                <div class="chart-box"><canvas id="marketChart"></canvas></div>
             </div>
         </div>
 
-        <div class="card metric">
-            <div class="card-label">Current Block Height</div>
-            <div id="current-block" class="mid-value">36.014.728</div>
+        <div class="glass-card metric">
+            <div class="card-tag">Current Block Height</div>
+            <div id="current-block" class="stat-text">36.014.728</div>
         </div>
 
-        <div class="card metric">
-            <div class="card-label">Total Network Transactions</div>
-            <div id="total-transactions" class="mid-value">318.699.429</div>
+        <div class="glass-card metric">
+            <div class="card-tag">Total Network Transactions</div>
+            <div id="total-transactions" class="stat-text">318.699.429</div>
         </div>
 
-        <div class="card metric">
-            <div class="card-label">Finality Speed</div>
-            <div id="tempo-finalidade" class="mid-value highlight">1.50s</div>
+        <div class="glass-card metric">
+            <div class="card-tag">Finality Speed</div>
+            <div id="tempo-finalidade" class="stat-text blue-glow">1.50s</div>
         </div>
 
-        <div class="card institutional">
+        <div class="glass-card whale-watcher">
             <div class="card-header">
                 <h2>Institutional Movement Watch (> 1,000 USDC)</h2>
                 <i class="fas fa-ellipsis-v"></i>
@@ -69,27 +71,26 @@
                             <th>Value (USDC)</th>
                             <th>Sender Label</th>
                             <th>Receiver Label</th>
+                            <th>Type</th>
                             <th>Tx Hash</th>
                         </tr>
                     </thead>
-                    <tbody id="whale-table">
-                        </tbody>
+                    <tbody id="whale-table"></tbody>
                 </table>
             </div>
         </div>
 
-        <div class="card stream">
+        <div class="glass-card stream-watcher">
             <div class="card-header">
                 <h2>Live Transaction Stream (Real-Time)</h2>
-                <div class="header-icons"><i class="fas fa-th-large"></i> <i class="fas fa-list"></i></div>
+                <div class="header-tools"><i class="fas fa-th"></i> <i class="fas fa-list"></i></div>
             </div>
-            <div class="stream-content">
-                <div class="network-map">
-                    <div class="map-label"><i class="fas fa-project-diagram"></i> Network topology</div>
+            <div class="stream-body">
+                <div class="topology-box">
+                    <span><i class="fas fa-project-diagram"></i> Network topology</span>
                     <div class="map-placeholder"></div>
                 </div>
-                <div id="recent-transactions-list" class="stream-list">
-                    </div>
+                <div id="recent-transactions-list" class="live-list"></div>
             </div>
         </div>
     </main>
