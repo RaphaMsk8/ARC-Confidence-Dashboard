@@ -11,62 +11,61 @@
 </head>
 <body class="dark-theme">
     <header>
-        <div class="header-top">
+        <div class="header-content">
             <h1>ARC Institutional Confidence Dashboard</h1>
             <p>Live USDC & Asset Analysis on ARC Network</p>
         </div>
         
         <div class="toolbar">
-            <button class="tool-btn">Filter by Asset <i class="fas fa-chevron-down"></i></button>
-            <div class="search-bar">
+            <div class="filter-group">
+                <select id="assetFilter" class="filter-select">
+                    <option>Filter by Asset</option>
+                </select>
+            </div>
+            <div class="search-bar-v3">
                 <input type="text" id="searchInput" placeholder="Search Wallet (0x...) or Tx Hash...">
                 <button onclick="performSearch()"><i class="fas fa-search"></i> Search</button>
             </div>
-            <div class="toggles">
-                <div class="toggle-item">Filter by Asset <label class="switch"><input type="checkbox" checked><span class="slider round"></span></label></div>
-                <div class="toggle-item">Timeframe <label class="switch"><input type="checkbox"><span class="slider round"></span></label></div>
+            <div class="toggle-group">
+                <label class="switch-label">Filter by Asset <input type="checkbox" checked><span class="slider"></span></label>
+                <label class="switch-label">Timeframe <input type="checkbox"><span class="slider"></span></label>
             </div>
         </div>
     </header>
 
     <main class="dashboard-grid">
-        <section class="card market-cap-card">
-            <div class="card-header">
-                <h2>USDC Market Cap (ARC)</h2>
-            </div>
-            <div class="market-content">
-                <div class="market-value">
-                    <span id="usdc-market-cap" class="value-main">$0.00</span>
-                    <span class="change positive"><i class="fas fa-caret-up"></i> +0.15%</span>
+        <section class="card market-card">
+            <div class="card-label">USDC Market Cap (ARC)</div>
+            <div class="market-data">
+                <div class="market-value-group">
+                    <span id="usdc-market-cap" class="main-value">$199.04 B</span>
+                    <span class="change-tag">+0.15%</span>
                 </div>
-                <div class="chart-container">
+                <div class="chart-box">
                     <canvas id="marketChart"></canvas>
                 </div>
             </div>
         </section>
 
         <section class="card mini-card">
-            <h3>Current Block Height</h3>
-            <div id="current-block" class="mini-value">...</div>
+            <div class="card-label">Current Block Height</div>
+            <div id="current-block" class="mini-value">36.016.824</div>
         </section>
 
         <section class="card mini-card">
-            <h3>Total Network Transactions</h3>
+            <div class="card-label">Total Network Transactions</div>
             <div id="total-transactions" class="mini-value">...</div>
         </section>
 
-        <section class="card mini-card">
-            <h3>Finality Speed</h3>
-            <div id="tempo-finalidade" class="mini-value highlight">1.50s</div>
+        <section class="card mini-card finality">
+            <div class="card-label">Finality Speed</div>
+            <div id="tempo-finalidade" class="mini-value blue-text">1.50s</div>
         </section>
 
-        <section class="card institutional-card">
-            <div class="card-header">
-                <h2>Institutional Movement Watch (> 1,000 USDC)</h2>
-                <i class="fas fa-ellipsis-h"></i>
-            </div>
-            <div class="table-wrapper">
-                <table id="whale-table">
+        <section class="card whale-card">
+            <div class="card-label">Institutional Movement Watch (> 1,000 USDC)</div>
+            <div class="table-container">
+                <table>
                     <thead>
                         <tr>
                             <th>Timestamp</th>
@@ -82,11 +81,8 @@
         </section>
 
         <section class="card stream-card">
-            <div class="card-header">
-                <h2>Live Transaction Stream</h2>
-                <div class="stream-icons"><i class="fas fa-list"></i> <i class="fas fa-th"></i></div>
-            </div>
-            <div id="recent-transactions-list">
+            <div class="card-label"><i class="fas fa-list"></i> Live Transaction Stream</div>
+            <div id="recent-transactions-list" class="stream-list">
                 </div>
         </section>
     </main>
