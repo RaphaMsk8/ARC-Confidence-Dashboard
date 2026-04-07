@@ -3,54 +3,91 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ARC Institutional Confidence Dashboard (AICD)</title>
+    <title>AICD | ARC Institutional Confidence Dashboard</title>
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/ethers/5.7.2/ethers.umd.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
-<body>
+<body class="dark-theme">
     <header>
-        <div class="header-content">
+        <div class="header-top">
             <h1>ARC Institutional Confidence Dashboard</h1>
             <p>Live USDC & Asset Analysis on ARC Network</p>
         </div>
-        <section class="search-container">
-            <input type="text" id="searchInput" placeholder="Search Wallet (0x...) or Tx Hash...">
-            <button onclick="performSearch()">
-                <i class="fas fa-search"></i> Search
-            </button>
-        </section>
+        
+        <div class="toolbar">
+            <button class="tool-btn">Filter by Asset <i class="fas fa-chevron-down"></i></button>
+            <div class="search-bar">
+                <input type="text" id="searchInput" placeholder="Search Wallet (0x...) or Tx Hash...">
+                <button onclick="performSearch()"><i class="fas fa-search"></i> Search</button>
+            </div>
+            <div class="toggles">
+                <div class="toggle-item">Filter by Asset <label class="switch"><input type="checkbox" checked><span class="slider round"></span></label></div>
+                <div class="toggle-item">Timeframe <label class="switch"><input type="checkbox"><span class="slider round"></span></label></div>
+            </div>
+        </div>
     </header>
 
-    <main>
-        <section class="card">
-            <h2>USDC Market Cap (ARC)</h2>
-            <div id="usdc-market-cap" class="data-display blue">Syncing...</div>
+    <main class="dashboard-grid">
+        <section class="card market-cap-card">
+            <div class="card-header">
+                <h2>USDC Market Cap (ARC)</h2>
+            </div>
+            <div class="market-content">
+                <div class="market-value">
+                    <span id="usdc-market-cap" class="value-main">$0.00</span>
+                    <span class="change positive"><i class="fas fa-caret-up"></i> +0.15%</span>
+                </div>
+                <div class="chart-container">
+                    <canvas id="marketChart"></canvas>
+                </div>
+            </div>
         </section>
 
-        <section class="card">
-            <h2>Current Block Height</h2>
-            <div id="current-block" class="data-display blue">...</div>
-        </section>
-        
-        <section class="card">
-            <h2>Total Network Transactions</h2>
-            <div id="total-transactions" class="data-display">...</div>
+        <section class="card mini-card">
+            <h3>Current Block Height</h3>
+            <div id="current-block" class="mini-value">...</div>
         </section>
 
-        <section class="card">
-            <h2>Finality Speed</h2>
-            <div id="tempo-finalidade" class="data-display blue">1.50s</div>
+        <section class="card mini-card">
+            <h3>Total Network Transactions</h3>
+            <div id="total-transactions" class="mini-value">...</div>
         </section>
 
-        <section class="card wide-card">
-            <h2>Institutional Movement Watch (> 1,000 USDC)</h2>
-            <div id="big-transactions">Scanning ARC Network for whale movements...</div>
+        <section class="card mini-card">
+            <h3>Finality Speed</h3>
+            <div id="tempo-finalidade" class="mini-value highlight">1.50s</div>
         </section>
-        
-        <section class="card wide-card">
-            <h2>Live Transaction Stream (Real-Time)</h2>
-            <div id="recent-transactions-list">Waiting for new transactions...</div>
+
+        <section class="card institutional-card">
+            <div class="card-header">
+                <h2>Institutional Movement Watch (> 1,000 USDC)</h2>
+                <i class="fas fa-ellipsis-h"></i>
+            </div>
+            <div class="table-wrapper">
+                <table id="whale-table">
+                    <thead>
+                        <tr>
+                            <th>Timestamp</th>
+                            <th>Value (USDC)</th>
+                            <th>Type</th>
+                            <th>Tx Hash</th>
+                        </tr>
+                    </thead>
+                    <tbody id="big-transactions-body">
+                        </tbody>
+                </table>
+            </div>
+        </section>
+
+        <section class="card stream-card">
+            <div class="card-header">
+                <h2>Live Transaction Stream</h2>
+                <div class="stream-icons"><i class="fas fa-list"></i> <i class="fas fa-th"></i></div>
+            </div>
+            <div id="recent-transactions-list">
+                </div>
         </section>
     </main>
 
