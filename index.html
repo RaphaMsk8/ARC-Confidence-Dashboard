@@ -1,17 +1,15 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ARC Institutional Confidence Dashboard</title>
     <link rel="stylesheet" href="styles.css">
-    <!-- Bibliotecas Necessárias -->
     <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.ethers.io/lib/ethers-5.2.umd.min.js"></script>
 </head>
 <body>
-    <!-- Camada de Fundo Estelar -->
     <div id="particles-js"></div>
 
     <header>
@@ -20,10 +18,7 @@
             <p>Live Asset Analysis & Execution Agent</p>
             
             <div class="header-controls">
-                <button id="connectWallet" class="btn-wallet-premium">
-                    Connect Wallet
-                </button>
-                
+                <button id="connectWallet" class="btn-wallet-premium">Connect Wallet</button>
                 <div class="premium-search-box">
                     <input type="text" id="searchInput" placeholder="Search Wallet / Tx Hash...">
                     <button id="searchBtn" class="btn-search-glow">SEARCH</button>
@@ -33,7 +28,7 @@
     </header>
 
     <main class="dashboard-container">
-        <!-- Linha 1: Métricas e Gráfico -->
+        <!-- Row 1: Metrics & Chart -->
         <section class="metrics-row">
             <div class="card chart-card">
                 <h3>USDC Market Cap (ARC)</h3>
@@ -62,45 +57,20 @@
             </div>
         </section>
 
-        <!-- Linha 2: Tabelas e Logs -->
-        <section class="monitor-row">
-            <div class="card table-card">
-                <h3>Institutional Movement Watch</h3>
-                <div class="table-container">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Timestamp</th>
-                                <th>Value (USDC)</th>
-                                <th>Type</th>
-                                <th>Tx Hash</th>
-                            </tr>
-                        </thead>
-                        <tbody id="movementTableBody">
-                            <!-- Injetado via JS -->
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-            <div class="card stream-card">
-                <h3>Live Stream</h3>
-                <div id="liveStream" class="stream-box">
-                    <p>Aguardando transações...</p>
-                </div>
-            </div>
-        </section>
-
-        <!-- Linha 3: AICD Forge -->
+        <!-- Row 2: AICD Forge (Agentic Execution) -->
         <section class="card forge-section">
             <div class="forge-header">
-                <h2>AICD Forge: Execução Agêntica</h2>
+                <h2>AICD Forge: Agentic Execution</h2>
                 <span class="status-badge">Ready to Sync</span>
             </div>
             
             <div class="forge-grid">
                 <div class="action-box">
-                    <h4>Bridge CCTP</h4>
-                    <select><option>Sepolia → ARC</option></select>
+                    <h4>CCTP Bridge</h4>
+                    <select id="bridgeDirection">
+                        <option value="sep-arc">Sepolia → ARC</option>
+                        <option value="arc-sep">ARC → Sepolia</option>
+                    </select>
                     <input type="number" placeholder="USDC Amount">
                     <button class="btn-forge">Execute Bridge</button>
                 </div>
@@ -108,9 +78,16 @@
                 <div class="action-box">
                     <h4>Smart Swap</h4>
                     <div class="swap-inputs">
-                        <select><option>USDC</option></select>
+                        <select id="tokenIn">
+                            <option>USDC</option>
+                            <option>EUROC</option>
+                        </select>
                         <span class="arrow">→</span>
-                        <select><option>SYN</option></select>
+                        <select id="tokenOut">
+                            <option>SYN</option>
+                            <option>EUROC</option>
+                            <option>USDC</option>
+                        </select>
                     </div>
                     <input type="number" placeholder="Amount">
                     <button class="btn-forge">Confirm Swap</button>
