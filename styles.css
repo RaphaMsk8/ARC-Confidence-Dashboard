@@ -1,15 +1,141 @@
+:root {
+    --bg: #0b0f1a;
+    --card-bg: #161b2b;
+    --border: #262c40;
+    --accent: #38bdf8;
+    --text: #ffffff;
+    --text-dim: #94a3b8;
+    --green: #2ecc71;
+}
+
+body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Segoe UI', Roboto, sans-serif;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+header {
+    background: #111827;
+    padding: 20px 40px;
+    border-bottom: 1px solid var(--border);
+}
+
+.header-top h1 { margin: 0; font-size: 1.5rem; letter-spacing: 1px; text-align: center;}
+.header-top p { color: var(--text-dim); text-align: center; margin: 5px 0 20px 0;}
+
+.toolbar {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
+}
+
+/* Botão de Conectar Moderno */
+.tool-btn {
+    background: transparent;
+    border: 1px solid var(--accent);
+    color: var(--accent);
+    padding: 10px 20px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: 0.3s;
+}
+
+.tool-btn:hover {
+    background: var(--accent);
+    color: var(--bg);
+}
+
+.search-bar {
+    display: flex;
+    background: #1f2937;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    width: 400px;
+}
+
+.search-bar input {
+    background: transparent; border: none; color: white;
+    padding: 10px; flex: 1; outline: none;
+}
+
+.search-bar button {
+    background: var(--accent); border: none; padding: 0 15px;
+    color: #0b0f1a; font-weight: bold; cursor: pointer;
+}
+
+.dashboard-grid {
+    display: grid;
+    max-width: 1400px;
+    margin: 20px auto;
+    gap: 20px;
+    padding: 20px;
+    grid-template-columns: repeat(4, 1fr);
+}
+
+.card {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+}
+
+.market-cap-card { grid-column: span 2; }
+.institutional-card { grid-column: span 3; }
+.stream-card { grid-column: span 1; }
+.forge-card { grid-column: span 4; border: 1px solid var(--accent); }
+
+.mini-value { font-size: 1.8rem; font-weight: bold; margin-top: 10px; color: var(--accent); }
+
 /* AICD FORGE STYLES */
-.forge-card { grid-column: span 4; margin-top: 20px; border: 1px solid var(--accent); }
-.forge-grid { display: flex; gap: 20px; padding: 15px; }
-.action-box { flex: 1; background: #1f2937; padding: 20px; border-radius: 8px; border: 1px solid var(--border); }
-.action-box h3 { margin-top: 0; color: var(--accent); font-size: 1rem; }
+.forge-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 25px;
+    margin-top: 20px;
+}
+
+.action-box {
+    background: #1c233a;
+    padding: 25px;
+    border-radius: 10px;
+    border: 1px solid var(--border);
+}
+
+.action-box h3 { margin: 0 0 15px 0; color: var(--accent); font-size: 1.1rem; }
+
 .action-box select, .action-box input { 
-    width: 100%; background: var(--bg); border: 1px solid var(--border); 
-    color: white; padding: 10px; margin-top: 10px; border-radius: 4px;
+    width: 100%; 
+    background: #0b0f1a; 
+    border: 1px solid var(--border); 
+    color: white; 
+    padding: 12px; 
+    margin-bottom: 15px; 
+    border-radius: 6px;
+    box-sizing: border-box; /* Importante para o input não passar da borda */
 }
-.swap-row { display: flex; align-items: center; gap: 10px; margin-top: 10px; }
+
+.swap-row { display: flex; align-items: center; gap: 15px; margin-bottom: 15px; }
+.swap-row i { color: var(--text-dim); }
+
 .btn-forge { 
-    width: 100%; background: var(--accent); color: var(--bg); border: none; 
-    padding: 12px; margin-top: 15px; border-radius: 4px; font-weight: bold; cursor: pointer;
+    width: 100%; 
+    background: var(--accent); 
+    color: var(--bg); 
+    border: none; 
+    padding: 15px; 
+    border-radius: 6px; 
+    font-weight: bold; 
+    cursor: pointer;
+    transition: 0.3s;
 }
-.btn-forge:hover { filter: brightness(1.2); }
+
+.btn-forge:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(56, 189, 248, 0.4); }
+
+footer { text-align: center; padding: 40px; color: var(--text-dim); font-size: 0.8rem; }
