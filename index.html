@@ -1,81 +1,115 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-br">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AICD | ARC Institutional Confidence Dashboard</title>
+    <title>ARC Institutional Confidence Dashboard</title>
     <link rel="stylesheet" href="styles.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
-    <!-- Atualizado para Ethers v6 para suportar as novas funções agênticas -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/ethers/6.7.0/ethers.umd.min.js"></script>
+    <!-- Bibliotecas de Visual e Ícones -->
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.ethers.io/lib/ethers-5.2.umd.min.js"></script>
 </head>
-<body class="dark-theme">
+<body>
+    <!-- Fundo de Estrelas Interativo -->
+    <div id="particles-js"></div>
+
     <header>
-        <div class="header-top">
-            <h1>ARC Institutional Confidence Dashboard</h1>
-            <p>Live USDC & Asset Analysis on ARC Network</p>
-        </div>
-        
-        <div class="toolbar">
-            <button class="tool-btn" onclick="connectWallet()" id="connectBtn">Connect Wallet <i class="fas fa-wallet"></i></button>
-            <div class="search-bar">
-                <input type="text" id="searchInput" placeholder="Search Wallet (0x...) or Tx Hash...">
-                <button onclick="performSearch()"><i class="fas fa-search"></i> Search</button>
+        <div class="header-content">
+            <h1>ARC <span class="glow">Institutional</span> Confidence</h1>
+            <p>Live Asset Analysis & Execution Agent</p>
+            <div class="toolbar">
+                <button id="connectWallet" class="btn-connect">Connect Wallet</button>
+                <div class="search-container">
+                    <input type="text" placeholder="Search Tx / Wallet (0x...)">
+                    <button>🔍</button>
+                </div>
             </div>
         </div>
     </header>
 
-    <main class="dashboard-grid">
-        <!-- SEÇÃO DE ANÁLISE (Suas métricas atuais) -->
-        <section class="card market-cap-card">
-            <div class="card-header"><h2>USDC Market Cap (ARC)</h2></div>
-            <div class="market-content">
-                <div class="market-value">
-                    <span id="usdc-market-cap" class="value-main">$0.00</span>
-                    <span class="change positive"><i class="fas fa-caret-up"></i> +0.15%</span>
+    <main class="dashboard-container">
+        <!-- Linha 1: Métricas Principais -->
+        <section class="metrics-row">
+            <div class="card chart-card">
+                <h3>USDC Market Cap (ARC)</h3>
+                <div class="value-group">
+                    <span class="main-value" id="marketCapText">$260.36 B</span>
+                    <span class="trend up">+0.15%</span>
                 </div>
-                <div class="chart-container"><canvas id="marketChart"></canvas></div>
+                <canvas id="marketChart"></canvas>
+            </div>
+
+            <div class="stats-column">
+                <div class="card mini-card">
+                    <p>Block Height</p>
+                    <h2 id="blockHeight" class="glow-text">--</h2>
+                </div>
+                <div class="card mini-card">
+                    <p>Finality Speed</p>
+                    <h2 id="finalityTime" class="glow-text">1.50s</h2>
+                </div>
+                <div class="card mini-card">
+                    <p>Network Txs</p>
+                    <h2 id="networkTxs" class="glow-text">--</h2>
+                </div>
             </div>
         </section>
 
-        <section class="card mini-card"><h3>Block Height</h3><div id="current-block" class="mini-value">...</div></section>
-        <section class="card mini-card"><h3>Network Txs</h3><div id="total-transactions" class="mini-value">...</div></section>
-        <section class="card mini-card"><h3>Finality Speed</h3><div id="tempo-finalidade" class="mini-value highlight">1.50s</div></section>
-
-        <section class="card institutional-card">
-            <div class="card-header"><h2>Institutional Movement Watch</h2></div>
-            <div class="table-wrapper">
-                <table id="whale-table">
-                    <thead><tr><th>Timestamp</th><th>Value (USDC)</th><th>Type</th><th>Tx Hash</th></tr></thead>
-                    <tbody id="big-transactions-body"></tbody>
-                </table>
+        <!-- Linha 2: Monitoramento -->
+        <section class="monitor-row">
+            <div class="card table-card">
+                <h3>Institutional Movement Watch</h3>
+                <div class="table-container">
+                    <table id="movementTable">
+                        <thead>
+                            <tr>
+                                <th>Timestamp</th>
+                                <th>Value (USDC)</th>
+                                <th>Type</th>
+                                <th>Tx Hash</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Dados entrarão via JS -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="card stream-card">
+                <h3>Live Stream</h3>
+                <div id="liveStream" class="stream-box">
+                    <p class="empty-msg">Aguardando transações...</p>
+                </div>
             </div>
         </section>
 
-        <section class="card stream-card">
-            <div class="card-header"><h2>Live Stream</h2></div>
-            <div id="recent-transactions-list"></div>
-        </section>
-
-        <!-- NOVA SEÇÃO: AICD FORGE (Operações) -->
-        <section class="card forge-card">
-            <div class="card-header"><h2>AICD Forge: Execução Agêntica</h2></div>
+        <!-- Linha 3: AICD FORGE (Execução) -->
+        <section class="card forge-section">
+            <div class="forge-header">
+                <h2>AICD Forge: Execução Agêntica</h2>
+                <span class="status-badge">Ready to Sync</span>
+            </div>
+            
             <div class="forge-grid">
                 <div class="action-box">
-                    <h3>Bridge CCTP</h3>
-                    <select id="bridge-dir"><option value="sepolia-arc">Sepolia ➔ ARC</option><option value="arc-sepolia">ARC ➔ Sepolia</option></select>
-                    <input type="number" id="bridge-amt" placeholder="USDC Amount">
+                    <h4>Bridge CCTP</h4>
+                    <select id="bridgeSelect">
+                        <option>Sepolia → ARC</option>
+                        <option>ARC → Sepolia</option>
+                    </select>
+                    <input type="number" id="bridgeAmount" placeholder="USDC Amount">
                     <button class="btn-forge" onclick="executeBridge()">Execute Bridge</button>
                 </div>
+
                 <div class="action-box">
-                    <h3>Smart Swap</h3>
-                    <div class="swap-row">
-                        <select id="swap-from"><option>USDC</option><option>EUROC</option><option>SYN</option></select>
-                        <i class="fas fa-arrow-right"></i>
-                        <select id="swap-to"><option>SYN</option><option>EUROC</option><option>USDC</option></select>
+                    <h4>Smart Swap</h4>
+                    <div class="swap-inputs">
+                        <select id="tokenIn"><option>USDC</option></select>
+                        <span class="arrow">→</span>
+                        <select id="tokenOut"><option>SYN</option><option>EUROC</option></select>
                     </div>
-                    <input type="number" id="swap-amt" placeholder="Amount">
+                    <input type="number" id="swapAmount" placeholder="Amount">
                     <button class="btn-forge" onclick="executeSwap()">Confirm Swap</button>
                 </div>
             </div>
