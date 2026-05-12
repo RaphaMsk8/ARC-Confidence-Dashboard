@@ -1,99 +1,15 @@
-:root {
-    --bg: #0b0f1a;
-    --card-bg: #161b2b;
-    --border: #262c40;
-    --accent: #38bdf8;
-    --text: #ffffff;
-    --text-dim: #94a3b8;
-    --green: #2ecc71;
+/* AICD FORGE STYLES */
+.forge-card { grid-column: span 4; margin-top: 20px; border: 1px solid var(--accent); }
+.forge-grid { display: flex; gap: 20px; padding: 15px; }
+.action-box { flex: 1; background: #1f2937; padding: 20px; border-radius: 8px; border: 1px solid var(--border); }
+.action-box h3 { margin-top: 0; color: var(--accent); font-size: 1rem; }
+.action-box select, .action-box input { 
+    width: 100%; background: var(--bg); border: 1px solid var(--border); 
+    color: white; padding: 10px; margin-top: 10px; border-radius: 4px;
 }
-
-body {
-    background: var(--bg);
-    color: var(--text);
-    font-family: 'Segoe UI', Roboto, sans-serif;
-    margin: 0;
+.swap-row { display: flex; align-items: center; gap: 10px; margin-top: 10px; }
+.btn-forge { 
+    width: 100%; background: var(--accent); color: var(--bg); border: none; 
+    padding: 12px; margin-top: 15px; border-radius: 4px; font-weight: bold; cursor: pointer;
 }
-
-header {
-    background: #111827;
-    padding: 20px 40px;
-    border-bottom: 1px solid var(--border);
-}
-
-.header-top h1 { margin: 0; font-size: 1.5rem; letter-spacing: 1px; text-align: center;}
-.header-top p { color: var(--text-dim); text-align: center; margin: 5px 0 20px 0;}
-
-.toolbar {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 15px;
-}
-
-.search-bar {
-    display: flex;
-    background: #1f2937;
-    border: 1px solid var(--accent);
-    border-radius: 6px;
-    width: 400px;
-}
-
-.search-bar input {
-    background: transparent; border: none; color: white;
-    padding: 10px; flex: 1; outline: none;
-}
-
-.search-bar button {
-    background: var(--accent); border: none; padding: 0 15px;
-    color: #0b0f1a; font-weight: bold; cursor: pointer;
-}
-
-.dashboard-grid {
-    display: grid;
-    max-width: 1600px;
-    margin: 20px auto;
-    gap: 15px;
-    padding: 0 20px;
-    grid-template-columns: repeat(4, 1fr);
-}
-
-.card {
-    background: var(--card-bg);
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    padding: 15px;
-}
-
-.market-cap-card { grid-column: span 2; grid-row: span 1; }
-.institutional-card { grid-column: span 3; }
-.stream-card { grid-column: span 1; grid-row: span 1; }
-
-.market-content { display: flex; align-items: center; justify-content: space-between; height: 120px; }
-.value-main { font-size: 2.5rem; font-weight: bold; }
-.chart-container { width: 50%; height: 100%; }
-
-.mini-value { font-size: 1.8rem; font-weight: bold; margin-top: 10px; }
-.highlight { color: var(--accent); }
-
-/* Tabelas e Itens */
-table { width: 100%; border-collapse: collapse; margin-top: 10px; }
-th { text-align: left; color: var(--text-dim); font-size: 0.8rem; padding-bottom: 10px; }
-td { padding: 10px 0; border-top: 1px solid var(--border); font-size: 0.9rem; }
-
-.transaction-item {
-    display: flex; justify-content: space-between;
-    padding: 10px 5px; border-bottom: 1px solid var(--border);
-    cursor: pointer; font-size: 0.85rem;
-}
-
-/* Switches */
-.toggle-item { display: flex; align-items: center; gap: 8px; font-size: 0.8rem; color: var(--text-dim); }
-.switch { position: relative; width: 34px; height: 18px; }
-.switch input { opacity: 0; width: 0; height: 0; }
-.slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background: #334155; border-radius: 20px; transition: .4s; }
-.slider:before { position: absolute; content: ""; height: 12px; width: 12px; left: 3px; bottom: 3px; background: white; border-radius: 50%; transition: .4s; }
-input:checked + .slider { background: var(--accent); }
-input:checked + .slider:before { transform: translateX(16px); }
-
-footer { text-align: center; padding: 40px; color: var(--text-dim); font-size: 0.8rem; }
+.btn-forge:hover { filter: brightness(1.2); }

@@ -6,7 +6,8 @@
     <title>AICD | ARC Institutional Confidence Dashboard</title>
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/ethers/5.7.2/ethers.umd.min.js"></script>
+    <!-- Atualizado para Ethers v6 para suportar as novas funções agênticas -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ethers/6.7.0/ethers.umd.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body class="dark-theme">
@@ -17,82 +18,72 @@
         </div>
         
         <div class="toolbar">
-            <button class="tool-btn">Filter by Asset <i class="fas fa-chevron-down"></i></button>
+            <button class="tool-btn" onclick="connectWallet()" id="connectBtn">Connect Wallet <i class="fas fa-wallet"></i></button>
             <div class="search-bar">
                 <input type="text" id="searchInput" placeholder="Search Wallet (0x...) or Tx Hash...">
                 <button onclick="performSearch()"><i class="fas fa-search"></i> Search</button>
-            </div>
-            <div class="toggles">
-                <div class="toggle-item">Filter by Asset <label class="switch"><input type="checkbox" checked><span class="slider round"></span></label></div>
-                <div class="toggle-item">Timeframe <label class="switch"><input type="checkbox"><span class="slider round"></span></label></div>
             </div>
         </div>
     </header>
 
     <main class="dashboard-grid">
+        <!-- SEÇÃO DE ANÁLISE (Suas métricas atuais) -->
         <section class="card market-cap-card">
-            <div class="card-header">
-                <h2>USDC Market Cap (ARC)</h2>
-            </div>
+            <div class="card-header"><h2>USDC Market Cap (ARC)</h2></div>
             <div class="market-content">
                 <div class="market-value">
                     <span id="usdc-market-cap" class="value-main">$0.00</span>
                     <span class="change positive"><i class="fas fa-caret-up"></i> +0.15%</span>
                 </div>
-                <div class="chart-container">
-                    <canvas id="marketChart"></canvas>
-                </div>
+                <div class="chart-container"><canvas id="marketChart"></canvas></div>
             </div>
         </section>
 
-        <section class="card mini-card">
-            <h3>Current Block Height</h3>
-            <div id="current-block" class="mini-value">...</div>
-        </section>
-
-        <section class="card mini-card">
-            <h3>Total Network Transactions</h3>
-            <div id="total-transactions" class="mini-value">...</div>
-        </section>
-
-        <section class="card mini-card">
-            <h3>Finality Speed</h3>
-            <div id="tempo-finalidade" class="mini-value highlight">1.50s</div>
-        </section>
+        <section class="card mini-card"><h3>Block Height</h3><div id="current-block" class="mini-value">...</div></section>
+        <section class="card mini-card"><h3>Network Txs</h3><div id="total-transactions" class="mini-value">...</div></section>
+        <section class="card mini-card"><h3>Finality Speed</h3><div id="tempo-finalidade" class="mini-value highlight">1.50s</div></section>
 
         <section class="card institutional-card">
-            <div class="card-header">
-                <h2>Institutional Movement Watch (> 1,000 USDC)</h2>
-                <i class="fas fa-ellipsis-h"></i>
-            </div>
+            <div class="card-header"><h2>Institutional Movement Watch</h2></div>
             <div class="table-wrapper">
                 <table id="whale-table">
-                    <thead>
-                        <tr>
-                            <th>Timestamp</th>
-                            <th>Value (USDC)</th>
-                            <th>Type</th>
-                            <th>Tx Hash</th>
-                        </tr>
-                    </thead>
-                    <tbody id="big-transactions-body">
-                        </tbody>
+                    <thead><tr><th>Timestamp</th><th>Value (USDC)</th><th>Type</th><th>Tx Hash</th></tr></thead>
+                    <tbody id="big-transactions-body"></tbody>
                 </table>
             </div>
         </section>
 
         <section class="card stream-card">
-            <div class="card-header">
-                <h2>Live Transaction Stream</h2>
-                <div class="stream-icons"><i class="fas fa-list"></i> <i class="fas fa-th"></i></div>
-            </div>
-            <div id="recent-transactions-list">
+            <div class="card-header"><h2>Live Stream</h2></div>
+            <div id="recent-transactions-list"></div>
+        </section>
+
+        <!-- NOVA SEÇÃO: AICD FORGE (Operações) -->
+        <section class="card forge-card">
+            <div class="card-header"><h2>AICD Forge: Execução Agêntica</h2></div>
+            <div class="forge-grid">
+                <div class="action-box">
+                    <h3>Bridge CCTP</h3>
+                    <select id="bridge-dir"><option value="sepolia-arc">Sepolia ➔ ARC</option><option value="arc-sepolia">ARC ➔ Sepolia</option></select>
+                    <input type="number" id="bridge-amt" placeholder="USDC Amount">
+                    <button class="btn-forge" onclick="executeBridge()">Execute Bridge</button>
                 </div>
+                <div class="action-box">
+                    <h3>Smart Swap</h3>
+                    <div class="swap-row">
+                        <select id="swap-from"><option>USDC</option><option>EUROC</option><option>SYN</option></select>
+                        <i class="fas fa-arrow-right"></i>
+                        <select id="swap-to"><option>SYN</option><option>EUROC</option><option>USDC</option></select>
+                    </div>
+                    <input type="number" id="swap-amt" placeholder="Amount">
+                    <button class="btn-forge" onclick="executeSwap()">Confirm Swap</button>
+                </div>
+            </div>
         </section>
     </main>
 
     <footer>
-        <p>Data Source: ARC Testnet RPC & ArcScan API | Developer: Raphael Marques</p>
+        <p>Data Source: ARC Testnet RPC | Developer: Raphael Marques</p>
     </footer>
 
     <script src="script.js"></script>
