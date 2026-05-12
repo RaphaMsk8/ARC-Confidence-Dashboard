@@ -5,49 +5,55 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ARC Institutional Confidence Dashboard</title>
     <link rel="stylesheet" href="styles.css">
-    <!-- Bibliotecas de Visual e Ícones -->
+    <!-- Bibliotecas Necessárias -->
     <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.ethers.io/lib/ethers-5.2.umd.min.js"></script>
 </head>
 <body>
-    <!-- Fundo de Estrelas Interativo -->
+    <!-- Camada de Fundo Estelar -->
     <div id="particles-js"></div>
 
     <header>
         <div class="header-content">
             <h1>ARC <span class="glow">Institutional</span> Confidence</h1>
             <p>Live Asset Analysis & Execution Agent</p>
-            <div class="toolbar">
-                <button id="connectWallet" class="btn-connect">Connect Wallet</button>
-                <div class="search-container">
-                    <input type="text" placeholder="Search Tx / Wallet (0x...)">
-                    <button>🔍</button>
+            
+            <div class="header-controls">
+                <button id="connectWallet" class="btn-wallet-premium">
+                    Connect Wallet
+                </button>
+                
+                <div class="premium-search-box">
+                    <input type="text" id="searchInput" placeholder="Search Wallet / Tx Hash...">
+                    <button id="searchBtn" class="btn-search-glow">SEARCH</button>
                 </div>
             </div>
         </div>
     </header>
 
     <main class="dashboard-container">
-        <!-- Linha 1: Métricas Principais -->
+        <!-- Linha 1: Métricas e Gráfico -->
         <section class="metrics-row">
             <div class="card chart-card">
                 <h3>USDC Market Cap (ARC)</h3>
                 <div class="value-group">
-                    <span class="main-value" id="marketCapText">$260.36 B</span>
+                    <span class="main-value">$260.36 B</span>
                     <span class="trend up">+0.15%</span>
                 </div>
-                <canvas id="marketChart"></canvas>
+                <div class="chart-container">
+                    <canvas id="marketChart"></canvas>
+                </div>
             </div>
 
             <div class="stats-column">
                 <div class="card mini-card">
                     <p>Block Height</p>
-                    <h2 id="blockHeight" class="glow-text">--</h2>
+                    <h2 id="blockHeight" class="glow-text">41.903.322</h2>
                 </div>
                 <div class="card mini-card">
                     <p>Finality Speed</p>
-                    <h2 id="finalityTime" class="glow-text">1.50s</h2>
+                    <h2 class="glow-text">1.50s</h2>
                 </div>
                 <div class="card mini-card">
                     <p>Network Txs</p>
@@ -56,12 +62,12 @@
             </div>
         </section>
 
-        <!-- Linha 2: Monitoramento -->
+        <!-- Linha 2: Tabelas e Logs -->
         <section class="monitor-row">
             <div class="card table-card">
                 <h3>Institutional Movement Watch</h3>
                 <div class="table-container">
-                    <table id="movementTable">
+                    <table>
                         <thead>
                             <tr>
                                 <th>Timestamp</th>
@@ -70,8 +76,8 @@
                                 <th>Tx Hash</th>
                             </tr>
                         </thead>
-                        <tbody>
-                            <!-- Dados entrarão via JS -->
+                        <tbody id="movementTableBody">
+                            <!-- Injetado via JS -->
                         </tbody>
                     </table>
                 </div>
@@ -79,12 +85,12 @@
             <div class="card stream-card">
                 <h3>Live Stream</h3>
                 <div id="liveStream" class="stream-box">
-                    <p class="empty-msg">Aguardando transações...</p>
+                    <p>Aguardando transações...</p>
                 </div>
             </div>
         </section>
 
-        <!-- Linha 3: AICD FORGE (Execução) -->
+        <!-- Linha 3: AICD Forge -->
         <section class="card forge-section">
             <div class="forge-header">
                 <h2>AICD Forge: Execução Agêntica</h2>
@@ -94,31 +100,24 @@
             <div class="forge-grid">
                 <div class="action-box">
                     <h4>Bridge CCTP</h4>
-                    <select id="bridgeSelect">
-                        <option>Sepolia → ARC</option>
-                        <option>ARC → Sepolia</option>
-                    </select>
-                    <input type="number" id="bridgeAmount" placeholder="USDC Amount">
-                    <button class="btn-forge" onclick="executeBridge()">Execute Bridge</button>
+                    <select><option>Sepolia → ARC</option></select>
+                    <input type="number" placeholder="USDC Amount">
+                    <button class="btn-forge">Execute Bridge</button>
                 </div>
 
                 <div class="action-box">
                     <h4>Smart Swap</h4>
                     <div class="swap-inputs">
-                        <select id="tokenIn"><option>USDC</option></select>
+                        <select><option>USDC</option></select>
                         <span class="arrow">→</span>
-                        <select id="tokenOut"><option>SYN</option><option>EUROC</option></select>
+                        <select><option>SYN</option></select>
                     </div>
-                    <input type="number" id="swapAmount" placeholder="Amount">
-                    <button class="btn-forge" onclick="executeSwap()">Confirm Swap</button>
+                    <input type="number" placeholder="Amount">
+                    <button class="btn-forge">Confirm Swap</button>
                 </div>
             </div>
         </section>
     </main>
-
-    <footer>
-        <p>Data Source: ARC Testnet RPC | Developer: Raphael Marques</p>
-    </footer>
 
     <script src="script.js"></script>
 </body>
