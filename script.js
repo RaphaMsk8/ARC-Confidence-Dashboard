@@ -1,17 +1,47 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // 1. Partículas (Constelação Sugada pelo Mouse)
+    // 1. Partículas (Tamanho de estrela e Interação corrigida)
     particlesJS("particles-js", {
         "particles": {
-            "number": { "value": 100 },
-            "color": { "value": "#38bdf8" },           
-            "line_linked": { "enable": true, "distance": 150, "color": "#38bdf8", "opacity": 0.2 },
+            "number": { "value": 120, "density": { "enable": true, "value_area": 800 } },
+            "color": { "value": "#38bdf8" },
+            "shape": { "type": "circle" },
+            "opacity": { "value": 0.5, "random": true },
+            "size": { 
+                "value": 2,      // TAMANHO DE ESTRELA
+                "random": true   // VARIAÇÃO PARA MAIS REALISMO
+            },
+            "line_linked": { 
+                "enable": true, 
+                "distance": 150, 
+                "color": "#38bdf8", 
+                "opacity": 0.2, 
+                "width": 1 
+            },
             "move": { "enable": true, "speed": 1.5 }
         },
         "interactivity": {
-            "events": { "onhover": { "enable": true, "mode": "grab" } },
-            "modes": { "grab": { "distance": 200, "line_linked": { "opacity": 0.8 } } }
-        }
+            "detect_on": "canvas",
+            "events": { 
+                "onhover": { 
+                    "enable": true, 
+                    "mode": "grab"  // CRIA A CONEXÃO COM O MOUSE
+                },
+                "onclick": {
+                    "enable": true,
+                    "mode": "push"
+                }
+            },
+            "modes": { 
+                "grab": { 
+                    "distance": 200, 
+                    "line_linked": { "opacity": 0.8 } 
+                }
+            }
+        },
+        "retina_detect": true
     });
+
+    // O RESTANTE DO SEU CÓDIGO (GRÁFICO, WALLET, ETC) CONTINUA IGUAL ABAIXO...
 
     // 2. Gráfico USDC
     const ctx = document.getElementById('marketChart').getContext('2d');
