@@ -1,23 +1,26 @@
-particlesJS("particles-js", {
-  "particles": {
-    "number": { "value": 130, "density": { "enable": true, "value_area": 800 } },
-    "color": { "value": "#38bdf8" },
-    "shape": { "type": "circle" },
-    "opacity": { "value": 0.6, "random": true },
-    "size": { "value": 2, "random": true }, 
-    "line_linked": { "enable": true, "distance": 150, "color": "#38bdf8", "opacity": 0.2 },
-    "move": { "enable": true, "speed": 1.2 }
-  },
-  "interactivity": {
-    "detect_on": "window",
-    "events": {
-      "onhover": { "enable": true, "mode": "bubble" } // Efeito de destaque/atração
-    },
-    "modes": {
-      "bubble": { "distance": 200, "size": 4, "duration": 0.3, "opacity": 1, "speed": 3 }
-    }
-  }
-});
+document.addEventListener('DOMContentLoaded', () => {
+    // 1. Partículas (Estrelas pequenas e efeito de atração)
+    particlesJS("particles-js", {
+        "particles": {
+            "number": { "value": 150, "density": { "enable": true, "value_area": 800 } },
+            "color": { "value": "#38bdf8" },
+            "shape": { "type": "circle" },
+            "opacity": { "value": 0.5, "random": true },
+            "size": { "value": 2, "random": true },
+            "line_linked": { "enable": true, "distance": 150, "color": "#38bdf8", "opacity": 0.2 },
+            "move": { "enable": true, "speed": 1.5 }
+        },
+        "interactivity": {
+            "detect_on": "window",
+            "events": {
+                "onhover": { "enable": true, "mode": "bubble" }
+            },
+            "modes": {
+                "bubble": { "distance": 200, "size": 4, "duration": 0.3, "opacity": 1 }
+            }
+        },
+        "retina_detect": true
+    });
 
     // 2. Gráfico USDC
     const ctx = document.getElementById('marketChart').getContext('2d');
@@ -50,10 +53,12 @@ particlesJS("particles-js", {
         } else { alert("Instale MetaMask"); }
     };
 
-    // 4. Mock de Block Height (Simulação)
+    // 4. Mock de Block Height
     setInterval(() => {
         const bh = document.getElementById('blockHeight');
-        let val = parseInt(bh.innerText.replace(/\./g, ''));
-        bh.innerText = (val + 1).toLocaleString('pt-BR');
+        if(bh) {
+            let val = parseInt(bh.innerText.replace(/\./g, ''));
+            bh.innerText = (val + 1).toLocaleString('pt-BR');
+        }
     }, 3000);
 });
