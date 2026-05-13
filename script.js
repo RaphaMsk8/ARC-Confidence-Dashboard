@@ -1,47 +1,23 @@
-document.addEventListener('DOMContentLoaded', () => {
-    // 1. Partículas (Tamanho de estrela e Interação corrigida)
-    particlesJS("particles-js", {
-        "particles": {
-            "number": { "value": 120, "density": { "enable": true, "value_area": 800 } },
-            "color": { "value": "#38bdf8" },
-            "shape": { "type": "circle" },
-            "opacity": { "value": 0.5, "random": true },
-            "size": { 
-                "value": 2,      // TAMANHO DE ESTRELA
-                "random": true   // VARIAÇÃO PARA MAIS REALISMO
-            },
-            "line_linked": { 
-                "enable": true, 
-                "distance": 150, 
-                "color": "#38bdf8", 
-                "opacity": 0.2, 
-                "width": 1 
-            },
-            "move": { "enable": true, "speed": 1.5 }
-        },
-        "interactivity": {
-            "detect_on": "canvas",
-            "events": { 
-                "onhover": { 
-                    "enable": true, 
-                    "mode": "grab"  // CRIA A CONEXÃO COM O MOUSE
-                },
-                "onclick": {
-                    "enable": true,
-                    "mode": "push"
-                }
-            },
-            "modes": { 
-                "grab": { 
-                    "distance": 200, 
-                    "line_linked": { "opacity": 0.8 } 
-                }
-            }
-        },
-        "retina_detect": true
-    });
-
-    // O RESTANTE DO SEU CÓDIGO (GRÁFICO, WALLET, ETC) CONTINUA IGUAL ABAIXO...
+particlesJS("particles-js", {
+  "particles": {
+    "number": { "value": 130, "density": { "enable": true, "value_area": 800 } },
+    "color": { "value": "#38bdf8" },
+    "shape": { "type": "circle" },
+    "opacity": { "value": 0.6, "random": true },
+    "size": { "value": 2, "random": true }, 
+    "line_linked": { "enable": true, "distance": 150, "color": "#38bdf8", "opacity": 0.2 },
+    "move": { "enable": true, "speed": 1.2 }
+  },
+  "interactivity": {
+    "detect_on": "window",
+    "events": {
+      "onhover": { "enable": true, "mode": "bubble" } // Efeito de destaque/atração
+    },
+    "modes": {
+      "bubble": { "distance": 200, "size": 4, "duration": 0.3, "opacity": 1, "speed": 3 }
+    }
+  }
+});
 
     // 2. Gráfico USDC
     const ctx = document.getElementById('marketChart').getContext('2d');
