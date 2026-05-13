@@ -4,6 +4,7 @@ document.addEventListener('DOMContentLoaded', () => {
         "particles": {
             "number": { "value": 100 },
             "color": { "value": "#38bdf8" },
+            "size": { "value": 2, "random": true },
             "line_linked": { "enable": true, "distance": 150, "color": "#38bdf8", "opacity": 0.2 },
             "move": { "enable": true, "speed": 1.5 }
         },
