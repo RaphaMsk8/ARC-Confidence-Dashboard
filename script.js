@@ -1,7 +1,45 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // ... (Mantenha seus códigos anteriores de 1.Partículas, 2.Gráfico e 4.Block Height exatamente iguais)
+    // 1. Partículas (Estrelas pequenas e efeito de atração) - INTACTO
+    particlesJS("particles-js", {
+        "particles": {
+            "number": { "value": 150, "density": { "enable": true, "value_area": 800 } },
+            "color": { "value": "#38bdf8" },
+            "shape": { "type": "circle" },
+            "opacity": { "value": 0.5, "random": true },
+            "size": { "value": 2, "random": true },
+            "line_linked": { "enable": true, "distance": 150, "color": "#38bdf8", "opacity": 0.2 },
+            "move": { "enable": true, "speed": 1.5 }
+        },
+        "interactivity": {
+            "detect_on": "window",
+            "events": {
+                "onhover": { "enable": true, "mode": "bubble" }
+            },
+            "modes": {
+                "bubble": { "distance": 200, "size": 4, "duration": 0.3, "opacity": 1 }
+            }
+        },
+        "retina_detect": true
+    });
 
-    // 3. Lógica da Wallet (Mantida, apenas guardando o endereço para uso posterior)
+    // 2. Gráfico USDC - INTACTO
+    const ctx = document.getElementById('marketChart').getContext('2d');
+    new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun'],
+            datasets: [{
+                data: [240, 255, 245, 258, 260, 260.36],
+                borderColor: '#38bdf8',
+                backgroundColor: 'rgba(56, 189, 248, 0.1)',
+                fill: true,
+                tension: 0.4
+            }]
+        },
+        options: { plugins: { legend: { display: false } }, scales: { y: { display: false }, x: { grid: { display: false } } } }
+    });
+
+    // 3. Lógica da Wallet - INTACTO (Com armazenamento seguro da variável)
     let userWalletAddress = null;
     const connectBtn = document.getElementById('connectWallet');
     connectBtn.onclick = async () => {
@@ -16,89 +54,78 @@ document.addEventListener('DOMContentLoaded', () => {
         } else { alert("Instale MetaMask"); }
     };
 
+    // 4. Mock de Block Height - INTACTO
+    setInterval(() => {
+        const bh = document.getElementById('blockHeight');
+        if(bh) {
+            let val = parseInt(bh.innerText.replace(/\./g, ''));
+            bh.innerText = (val + 1).toLocaleString('pt-BR');
+        }
+    }, 3000);
+
     // =========================================================================
-    // NOVA IMPLEMENTAÇÃO: GERENCIAMENTO DE ROTA (IDA / VOLTA CCTP)
+    // IMPLEMENTAÇÃO LOGICA DA SETA DE ALTERNAÇÃO (IDA / VOLTA CCTP)
     // =========================================================================
-    
-    // Estado interno para rastrear a direção (false = Sepolia -> ARC | true = ARC -> Sepolia)
     let isReversedDirection = false;
 
-    // Captura dos elementos da interface (Adicione esses IDs no seu HTML)
-    const swapDirectionBtn = document.getElementById('swapDirection'); // O botão da seta do seu print
-    const sourceNetworkLabel = document.getElementById('sourceNetwork'); // Texto da rede de origem
-    const destNetworkLabel = document.getElementById('destNetwork');     // Texto da rede de destino
-    const bridgeSubmitBtn = document.getElementById('executeBridgeBtn'); // Botão principal de envio
+    const swapDirectionBtn = document.getElementById('swapDirection');
+    const sourceNetworkLabel = document.getElementById('sourceNetwork');
+    const destNetworkLabel = document.getElementById('destNetwork');
+    const bridgeSubmitBtn = document.getElementById('executeBridgeBtn');
 
     if (swapDirectionBtn && sourceNetworkLabel && destNetworkLabel) {
         swapDirectionBtn.onclick = () => {
-            // Inverte o estado da rota
             isReversedDirection = !isReversedDirection;
 
-            // Altera visualmente os textos para o usuário/agente humano
             if (isReversedDirection) {
                 sourceNetworkLabel.innerText = "ARC L1";
                 destNetworkLabel.innerText = "Sepolia";
-                if(bridgeSubmitBtn) bridgeSubmitBtn.innerText = "Execute Return Bridge (ARC -> Sepolia)";
-                
-                // Telemetria do Agente (Opcional - Altera seu console inferior de IA)
-                updateAgentLogs("[CONTEXT] Direction inverted by Agent/User. Route: ARC -> Sepolia Testnet.");
+                if(bridgeSubmitBtn) bridgeSubmitBtn.innerText = "Execute Return Bridge";
+                updateAgentLogs("[CONTEXT] Rota alternada pelo Agente/Usuário: ARC L1 -> Sepolia Testnet.");
             } else {
                 sourceNetworkLabel.innerText = "Sepolia";
                 destNetworkLabel.innerText = "ARC L1";
                 if(bridgeSubmitBtn) bridgeSubmitBtn.innerText = "Execute Bridge";
-                
-                updateAgentLogs("[CONTEXT] Direction inverted by Agent/User. Route: Sepolia -> ARC L1.");
+                updateAgentLogs("[CONTEXT] Rota alternada pelo Agente/Usuário: Sepolia -> ARC L1.");
             }
         };
     }
 
-    // Gatilho do Botão de Execução
+    // Gatilho de Execução Corrigido (Lê o input apenas no momento do clique)
     if (bridgeSubmitBtn) {
         bridgeSubmitBtn.onclick = async () => {
-            const inputAmount = document.getElementById('bridgeInputAmount').value; // Seu campo de input numérico
+            const inputElement = document.getElementById('bridgeInputAmount');
+            const inputAmount = inputElement ? inputElement.value : 0;
+
             if (!inputAmount || inputAmount <= 0) {
-                alert("Insira um valor válido");
+                alert("Insira um valor válido para a operação");
                 return;
             }
 
             if (isReversedDirection) {
-                // Executa a nova rota de volta
                 await executeArcToSepoliaBridge(inputAmount);
             } else {
-                // Executa a rota padrão atual de ida
                 await executeSepoliaToArcBridge(inputAmount);
             }
         };
     }
 
-    // Funções de infraestrutura Web3 (Onde os Agentes e Contratos se comunicam)
     async function executeSepoliaToArcBridge(amount) {
-        updateAgentLogs(`[INFO] Initiating Sepolia -> ARC. Amount: ${amount} USDC`);
-        updateAgentLogs("[BURN] Calling TokenMessenger on Sepolia...");
-        // Seu código atual de mint/burn da Sepolia entra aqui...
+        updateAgentLogs(`[INFO] Iniciando Bridge: Sepolia -> ARC. Volume: ${amount} USDC`);
+        updateAgentLogs("[BURN] Chamando contrato TokenMessenger na rede Sepolia...");
     }
 
     async function executeArcToSepoliaBridge(amount) {
-        updateAgentLogs(`[INFO] Initiating Return Route: ARC -> Sepolia. Amount: ${amount} USDC`);
-        updateAgentLogs("[BURN] Calling TokenMessenger on ARC L1 Contract...");
-        
-        // Exemplo tático de inversão de parâmetros para o Agente Autônomo:
-        // const domainIdSepolia = 0;
-        // await tokenMessengerArc.depositForBurn(amount, domainIdSepolia, ...);
-        
-        // Simulação de resposta para atualizar sua nova telemetria
-        setTimeout(() => {
-            updateAgentLogs("[WAIT] Burning complete on ARC. Fetching Circle Attestation (V1/V2 stable)...");
-        }, 1500);
+        updateAgentLogs(`[INFO] Iniciando Rota de Retorno: ARC -> Sepolia. Volume: ${amount} USDC`);
+        updateAgentLogs("[BURN] Chamando contrato TokenMessenger na infraestrutura ARC L1...");
     }
 
-    // Função auxiliar para injetar texto na sua nova div de Telemetria Inferior
     function updateAgentLogs(message) {
         const consoleLogDiv = document.getElementById('agentConsoleLogs');
         if (consoleLogDiv) {
             const time = new Date().toLocaleTimeString('pt-BR');
             consoleLogDiv.innerHTML += `<div>[${time}] ${message}</div>`;
-            consoleLogDiv.scrollTop = consoleLogDiv.scrollHeight; // Auto-scroll
+            consoleLogDiv.scrollTop = consoleLogDiv.scrollHeight;
         }
     }
 });
