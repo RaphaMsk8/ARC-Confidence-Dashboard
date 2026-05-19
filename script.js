@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // 1. Partículas (Estrelas pequenas e efeito de atração) - INTACTO
+    // 1. Partículas (Estrelas pequenas e efeito de atração)
     particlesJS("particles-js", {
         "particles": {
             "number": { "value": 150, "density": { "enable": true, "value_area": 800 } },
@@ -22,7 +22,7 @@ document.addEventListener('DOMContentLoaded', () => {
         "retina_detect": true
     });
 
-    // 2. Gráfico USDC - INTACTO
+    // 2. Gráfico USDC
     const ctx = document.getElementById('marketChart').getContext('2d');
     new Chart(ctx, {
         type: 'line',
@@ -39,7 +39,7 @@ document.addEventListener('DOMContentLoaded', () => {
         options: { plugins: { legend: { display: false } }, scales: { y: { display: false }, x: { grid: { display: false } } } }
     });
 
-    // 3. Lógica da Wallet - INTACTO (Com armazenamento seguro da variável)
+    // 3. Lógica da Wallet
     let userWalletAddress = null;
     const connectBtn = document.getElementById('connectWallet');
     connectBtn.onclick = async () => {
@@ -54,7 +54,7 @@ document.addEventListener('DOMContentLoaded', () => {
         } else { alert("Instale MetaMask"); }
     };
 
-    // 4. Mock de Block Height - INTACTO
+    // 4. Mock de Block Height
     setInterval(() => {
         const bh = document.getElementById('blockHeight');
         if(bh) {
@@ -81,24 +81,24 @@ document.addEventListener('DOMContentLoaded', () => {
                 sourceNetworkLabel.innerText = "ARC L1";
                 destNetworkLabel.innerText = "Sepolia";
                 if(bridgeSubmitBtn) bridgeSubmitBtn.innerText = "Execute Return Bridge";
-                updateAgentLogs("[CONTEXT] Rota alternada pelo Agente/Usuário: ARC L1 -> Sepolia Testnet.");
+                updateAgentLogs("[CONTEXT] Route updated by agent/user: ARC L1 -> Sepolia Testnet.");
             } else {
                 sourceNetworkLabel.innerText = "Sepolia";
                 destNetworkLabel.innerText = "ARC L1";
                 if(bridgeSubmitBtn) bridgeSubmitBtn.innerText = "Execute Bridge";
-                updateAgentLogs("[CONTEXT] Rota alternada pelo Agente/Usuário: Sepolia -> ARC L1.");
+                updateAgentLogs("[CONTEXT] Route updated by agent/user: Sepolia -> ARC L1.");
             }
         };
     }
 
-    // Gatilho de Execução Corrigido (Lê o input apenas no momento do clique)
+    // Gatilho de Execução
     if (bridgeSubmitBtn) {
         bridgeSubmitBtn.onclick = async () => {
             const inputElement = document.getElementById('bridgeInputAmount');
             const inputAmount = inputElement ? inputElement.value : 0;
 
             if (!inputAmount || inputAmount <= 0) {
-                alert("Insira um valor válido para a operação");
+                alert("Please enter a valid amount for the operation.");
                 return;
             }
 
@@ -111,21 +111,44 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     async function executeSepoliaToArcBridge(amount) {
-        updateAgentLogs(`[INFO] Iniciando Bridge: Sepolia -> ARC. Volume: ${amount} USDC`);
-        updateAgentLogs("[BURN] Chamando contrato TokenMessenger na rede Sepolia...");
+        updateAgentLogs(`[ACTION] Initiating Bridge Request: Sepolia -> ARC L1. Volume: ${amount} USDC`);
+        updateAgentLogs("[BURN] Invoking TokenMessenger contract on Sepolia Network...");
     }
 
     async function executeArcToSepoliaBridge(amount) {
-        updateAgentLogs(`[INFO] Iniciando Rota de Retorno: ARC -> Sepolia. Volume: ${amount} USDC`);
-        updateAgentLogs("[BURN] Chamando contrato TokenMessenger na infraestrutura ARC L1...");
+        updateAgentLogs(`[ACTION] Initiating Return Bridge Request: ARC L1 -> Sepolia. Volume: ${amount} USDC`);
+        updateAgentLogs("[BURN] Invoking TokenMessenger contract on ARC L1 Infrastructure...");
     }
 
+    // Sistema Avançado de Logs com Filtro de Cores e Limitador de Linhas (Buffer Cíclico)
     function updateAgentLogs(message) {
         const consoleLogDiv = document.getElementById('agentConsoleLogs');
-        if (consoleLogDiv) {
-            const time = new Date().toLocaleTimeString('pt-BR');
-            consoleLogDiv.innerHTML += `<div>[${time}] ${message}</div>`;
-            consoleLogDiv.scrollTop = consoleLogDiv.scrollHeight;
+        if (!consoleLogDiv) return;
+
+        const time = new Date().toLocaleTimeString('en-US', { hour12: false });
+        let styledMessage = message;
+
+        // Injeta cores específicas baseadas nas tags padrão de engenharia Web3
+        if (message.includes("[SYSTEM]")) {
+            styledMessage = `<span style="color: #38bdf8;">${message}</span>`;
+        } else if (message.includes("[CONTEXT]")) {
+            styledMessage = `<span style="color: #eab308;">${message}</span>`;
+        } else if (message.includes("[ACTION]")) {
+            styledMessage = `<span style="color: #a3e635;">${message}</span>`;
+        } else if (message.includes("[BURN]") || message.includes("[MINT]")) {
+            styledMessage = `<span style="color: #f43f5e;">${message}</span>`;
         }
+
+        // Adiciona a nova linha de log estruturada
+        consoleLogDiv.innerHTML += `<div style="margin-bottom: 4px; font-family: monospace;">[${time}] ${styledMessage}</div>`;
+
+        // Engenharia de Memória: Mantém estritamente os últimos 10 logs no DOM
+        const maxLogs = 10;
+        while (consoleLogDiv.children.length > maxLogs) {
+            consoleLogDiv.removeChild(consoleLogDiv.firstChild);
+        }
+
+        // Força o scroll automático para o log mais recente
+        consoleLogDiv.scrollTop = consoleLogDiv.scrollHeight;
     }
 });
