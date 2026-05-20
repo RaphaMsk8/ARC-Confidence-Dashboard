@@ -105,13 +105,25 @@
 
                 <div class="action-box">
                     <h4>Smart Swap</h4>
-                    <div class="swap-inputs" style="margin-bottom: 12px;">
-                        <select><option>USDC</option></select>
-                        <span class="arrow">→</span>
-                        <select><option>SYN</option></select>
+                    <div class="swap-inputs" style="margin-bottom: 12px; display: flex; align-items: center; gap: 10px;">
+                        <select id="swapSourceAsset" style="background: transparent; border: 1px solid rgba(56, 189, 248, 0.5); color: #fff; padding: 4px; border-radius: 4px; cursor: pointer;">
+                            <option value="USDC" style="background: #0f172a;">USDC</option>
+                            <option value="EUROC" style="background: #0f172a;">EUROC</option>
+                            <option value="SYN" style="background: #0f172a;">SYN</option>
+                            <option value="ARC" style="background: #0f172a;">ARC</option>
+                        </select>
+                        
+                        <button id="swapAssetDirection" class="btn-arrow-swap" title="Invert Tokens" type="button" style="background: transparent; border: 1px solid #38bdf8; color: #38bdf8; cursor: pointer; padding: 2px 8px; border-radius: 4px;">⇄</button>
+                        
+                        <select id="swapDestAsset" style="background: transparent; border: 1px solid rgba(56, 189, 248, 0.5); color: #fff; padding: 4px; border-radius: 4px; cursor: pointer;">
+                            <option value="SYN" style="background: #0f172a;">SYN</option>
+                            <option value="USDC" style="background: #0f172a;">USDC</option>
+                            <option value="EUROC" style="background: #0f172a;">EUROC</option>
+                            <option value="ARC" style="background: #0f172a;">ARC</option>
+                        </select>
                     </div>
-                    <input type="number" placeholder="Amount">
-                    <button class="btn-forge">Confirm Swap</button>
+                    <input type="number" id="swapInputAmount" placeholder="Amount">
+                    <button id="executeSwapBtn" class="btn-forge">Confirm Swap</button>
                 </div>
             </div>
 

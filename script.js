@@ -91,7 +91,7 @@ document.addEventListener('DOMContentLoaded', () => {
         };
     }
 
-    // Gatilho de Execução
+    // Gatilho de Execução da Bridge
     if (bridgeSubmitBtn) {
         bridgeSubmitBtn.onclick = async () => {
             const inputElement = document.getElementById('bridgeInputAmount');
@@ -120,7 +120,77 @@ document.addEventListener('DOMContentLoaded', () => {
         updateAgentLogs("[BURN] Invoking TokenMessenger contract on ARC L1 Infrastructure...");
     }
 
-    // Sistema Avançado de Logs com Filtro de Cores e Limitador de Linhas (Buffer Cíclico)
+    // =========================================================================
+    // NOVA IMPLEMENTAÇÃO: SMART SWAP INTERATIVO E MULTI-ATIVOS (LADO DIREITO)
+    // =========================================================================
+    const swapAssetDirectionBtn = document.getElementById('swapAssetDirection');
+    const sourceAssetSelect = document.getElementById('swapSourceAsset');
+    const destAssetSelect = document.getElementById('swapDestAsset');
+    const swapSubmitBtn = document.getElementById('executeSwapBtn');
+
+    if (swapAssetDirectionBtn && sourceAssetSelect && destAssetSelect) {
+        swapAssetDirectionBtn.onclick = () => {
+            // Guarda temporariamente os ativos selecionados para fazer a inversão
+            const oldSource = sourceAssetSelect.value;
+            const oldDest = destAssetSelect.value;
+
+            // Se os ativos forem iguais, previne o travamento invertendo as posições de forma inteligente
+            if (oldSource === oldDest) {
+                return; 
+            }
+
+            sourceAssetSelect.value = oldDest;
+            destAssetSelect.value = oldSource;
+
+            updateAgentLogs(`[CONTEXT] Swap pair inverted by agent/user. Target path: ${destAssetSelect.value} ⇄ ${sourceAssetSelect.value}`);
+        };
+    }
+
+    // Monitoramento de mudanças manuais nos Seletores
+    if(sourceAssetSelect && destAssetSelect) {
+        sourceAssetSelect.onchange = () => {
+            updateAgentLogs(`[CONTEXT] Source asset updated: ${sourceAssetSelect.value}`);
+        };
+        destAssetSelect.onchange = () => {
+            updateAgentLogs(`[CONTEXT] Destination asset updated: ${destAssetSelect.value}`);
+        };
+    }
+
+    // Gatilho de Execução do Smart Swap
+    if (swapSubmitBtn) {
+        swapSubmitBtn.onclick = async () => {
+            const swapInputElement = document.getElementById('swapInputAmount');
+            const swapAmount = swapInputElement ? swapInputElement.value : 0;
+            const fromToken = sourceAssetSelect.value;
+            const toToken = destAssetSelect.value;
+
+            if (!swapAmount || swapAmount <= 0) {
+                alert("Please enter a valid amount for the swap operation.");
+                return;
+            }
+
+            if (fromToken === toToken) {
+                alert("Source and Destination assets cannot be identical.");
+                return;
+            }
+
+            await executeSmartSwap(swapAmount, fromToken, toToken);
+        };
+    }
+
+    async function executeSmartSwap(amount, fromToken, toToken) {
+        updateAgentLogs(`[ACTION] Requesting Smart Swap Order: ${amount} ${fromToken} -> ${toToken}`);
+        updateAgentLogs(`[ROUTING] Querying Liquidity Pools on ARC L1 router for ${fromToken}/${toToken}...`);
+        
+        // Simula uma resposta assíncrona do Agente de Liquidez para fins visuais na telemetria
+        setTimeout(() => {
+            updateAgentLogs(`[POOL] Optimal route located. Estimated Price Impact: < 0.08%. Executing Swap contract call...`);
+        }, 1200);
+    }
+
+    // =========================================================================
+    // SISTEMA AVANÇADO DE LOGS COM FILTRO DE CORES E AUTO-CLEANUP
+    // =========================================================================
     function updateAgentLogs(message) {
         const consoleLogDiv = document.getElementById('agentConsoleLogs');
         if (!consoleLogDiv) return;
@@ -128,15 +198,17 @@ document.addEventListener('DOMContentLoaded', () => {
         const time = new Date().toLocaleTimeString('en-US', { hour12: false });
         let styledMessage = message;
 
-        // Injeta cores específicas baseadas nas tags padrão de engenharia Web3
+        // Injeta cores específicas baseadas nas tags padrão de engenharia Web3 / DeFI
         if (message.includes("[SYSTEM]")) {
-            styledMessage = `<span style="color: #38bdf8;">${message}</span>`;
+            styledMessage = `<span style="color: #38bdf8;">${message}</span>`; // Cyan para o núcleo
         } else if (message.includes("[CONTEXT]")) {
-            styledMessage = `<span style="color: #eab308;">${message}</span>`;
+            styledMessage = `<span style="color: #eab308;">${message}</span>`; // Amarelo para mudanças de estado
         } else if (message.includes("[ACTION]")) {
-            styledMessage = `<span style="color: #a3e635;">${message}</span>`;
+            styledMessage = `<span style="color: #a3e635;">${message}</span>`; // Verde para cliques principais
         } else if (message.includes("[BURN]") || message.includes("[MINT]")) {
-            styledMessage = `<span style="color: #f43f5e;">${message}</span>`;
+            styledMessage = `<span style="color: #f43f5e;">${message}</span>`; // Vermelho/Rosa para chamadas on-chain
+        } else if (message.includes("[ROUTING]") || message.includes("[POOL]")) {
+            styledMessage = `<span style="color: #c084fc;">${message}</span>`; // Roxo/Púrpura para operações de Swap e Liquidez
         }
 
         // Adiciona a nova linha de log estruturada
