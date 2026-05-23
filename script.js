@@ -91,7 +91,7 @@ document.addEventListener('DOMContentLoaded', () => {
         };
     }
 
-    // Gatilho de Execução da Bridge
+    // Monitor de Execução da Bridge
     if (bridgeSubmitBtn) {
         bridgeSubmitBtn.onclick = async () => {
             const inputElement = document.getElementById('bridgeInputAmount');
@@ -121,7 +121,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // =========================================================================
-    // NOVA IMPLEMENTAÇÃO: SMART SWAP INTERATIVO E MULTI-ATIVOS (LADO DIREITO)
+    // SMART SWAP INTERATIVO E MULTI-ATIVOS (LADO DIREITO) - ATIVOS ATUALIZADOS
     // =========================================================================
     const swapAssetDirectionBtn = document.getElementById('swapAssetDirection');
     const sourceAssetSelect = document.getElementById('swapSourceAsset');
@@ -130,11 +130,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (swapAssetDirectionBtn && sourceAssetSelect && destAssetSelect) {
         swapAssetDirectionBtn.onclick = () => {
-            // Guarda temporariamente os ativos selecionados para fazer a inversão
             const oldSource = sourceAssetSelect.value;
             const oldDest = destAssetSelect.value;
 
-            // Se os ativos forem iguais, previne o travamento invertendo as posições de forma inteligente
             if (oldSource === oldDest) {
                 return; 
             }
@@ -146,7 +144,6 @@ document.addEventListener('DOMContentLoaded', () => {
         };
     }
 
-    // Monitoramento de mudanças manuais nos Seletores
     if(sourceAssetSelect && destAssetSelect) {
         sourceAssetSelect.onchange = () => {
             updateAgentLogs(`[CONTEXT] Source asset updated: ${sourceAssetSelect.value}`);
@@ -156,7 +153,6 @@ document.addEventListener('DOMContentLoaded', () => {
         };
     }
 
-    // Gatilho de Execução do Smart Swap
     if (swapSubmitBtn) {
         swapSubmitBtn.onclick = async () => {
             const swapInputElement = document.getElementById('swapInputAmount');
@@ -182,7 +178,6 @@ document.addEventListener('DOMContentLoaded', () => {
         updateAgentLogs(`[ACTION] Requesting Smart Swap Order: ${amount} ${fromToken} -> ${toToken}`);
         updateAgentLogs(`[ROUTING] Querying Liquidity Pools on ARC L1 router for ${fromToken}/${toToken}...`);
         
-        // Simula uma resposta assíncrona do Agente de Liquidez para fins visuais na telemetria
         setTimeout(() => {
             updateAgentLogs(`[POOL] Optimal route located. Estimated Price Impact: < 0.08%. Executing Swap contract call...`);
         }, 1200);
@@ -198,29 +193,25 @@ document.addEventListener('DOMContentLoaded', () => {
         const time = new Date().toLocaleTimeString('en-US', { hour12: false });
         let styledMessage = message;
 
-        // Injeta cores específicas baseadas nas tags padrão de engenharia Web3 / DeFI
         if (message.includes("[SYSTEM]")) {
-            styledMessage = `<span style="color: #38bdf8;">${message}</span>`; // Cyan para o núcleo
+            styledMessage = `<span style="color: #38bdf8;">${message}</span>`;
         } else if (message.includes("[CONTEXT]")) {
-            styledMessage = `<span style="color: #eab308;">${message}</span>`; // Amarelo para mudanças de estado
+            styledMessage = `<span style="color: #eab308;">${message}</span>`;
         } else if (message.includes("[ACTION]")) {
-            styledMessage = `<span style="color: #a3e635;">${message}</span>`; // Verde para cliques principais
+            styledMessage = `<span style="color: #a3e635;">${message}</span>`;
         } else if (message.includes("[BURN]") || message.includes("[MINT]")) {
-            styledMessage = `<span style="color: #f43f5e;">${message}</span>`; // Vermelho/Rosa para chamadas on-chain
+            styledMessage = `<span style="color: #f43f5e;">${message}</span>`;
         } else if (message.includes("[ROUTING]") || message.includes("[POOL]")) {
-            styledMessage = `<span style="color: #c084fc;">${message}</span>`; // Roxo/Púrpura para operações de Swap e Liquidez
+            styledMessage = `<span style="color: #c084fc;">${message}</span>`;
         }
 
-        // Adiciona a nova linha de log estruturada
         consoleLogDiv.innerHTML += `<div style="margin-bottom: 4px; font-family: monospace;">[${time}] ${styledMessage}</div>`;
 
-        // Engenharia de Memória: Mantém estritamente os últimos 10 logs no DOM
         const maxLogs = 10;
         while (consoleLogDiv.children.length > maxLogs) {
             consoleLogDiv.removeChild(consoleLogDiv.firstChild);
         }
 
-        // Força o scroll automático para o log mais recente
         consoleLogDiv.scrollTop = consoleLogDiv.scrollHeight;
     }
 });
