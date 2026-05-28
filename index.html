@@ -35,8 +35,8 @@
             <div class="card chart-card">
                 <h3>USDC Market Cap (ARC)</h3>
                 <div class="value-group">
-                    <span class="main-value">$ -- B</span>
-                    <span class="trend">+0.00%</span>
+                    <span class="main-value">$260.36 B</span>
+                    <span class="trend up">+0.15%</span>
                 </div>
                 <div class="chart-container">
                     <canvas id="marketChart"></canvas>
@@ -45,15 +45,15 @@
 
             <div class="stats-column">
                 <div class="card mini-card">
-                    <p>Block Height (ARC Testnet)</p>
-                    <h2 id="blockHeight" class="glow-text">Sincronizando...</h2>
+                    <p>Block Height</p>
+                    <h2 id="blockHeight" class="glow-text">41.903.322</h2>
                 </div>
                 <div class="card mini-card">
-                    <p>Finality Speed (Média Real)</p>
-                    <h2 id="finalitySpeed" class="glow-text">--s</h2>
+                    <p>Finality Speed</p>
+                    <h2 class="glow-text">1.50s</h2>
                 </div>
                 <div class="card mini-card">
-                    <p>Last Block Txs</p>
+                    <p>Network Txs</p>
                     <h2 id="networkTxs" class="glow-text">--</h2>
                 </div>
             </div>
@@ -73,14 +73,14 @@
                             </tr>
                         </thead>
                         <tbody id="movementTableBody">
-                            </tbody>
+                        </tbody>
                     </table>
                 </div>
             </div>
             <div class="card stream-card">
-                <h3>Live Stream (Global Activity)</h3>
+                <h3>Live Stream</h3>
                 <div id="liveStream" class="stream-box">
-                    <p>Aguardando transações da rede ARC...</p>
+                    <p>Aguardando transações...</p>
                 </div>
             </div>
         </section>
@@ -88,7 +88,7 @@
         <section class="card forge-section" style="display: flex; flex-direction: column; gap: 20px; box-sizing: border-box;">
             <div class="forge-header">
                 <h2>AICD Forge: Execution Agent</h2>
-                <span id="agentStatusBadge" class="status-badge">Ready to Sync</span>
+                <span class="status-badge">Ready to Sync</span>
             </div>
             
             <div class="forge-grid">
